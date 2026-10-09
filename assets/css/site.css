@@ -290,7 +290,7 @@ a.row-card:hover .row-arrow { color: var(--c); }
 }
 .p-card { text-decoration: none; color: inherit; }
 .p-card:hover { transform: translateY(-3px); box-shadow: 0 6px 0 -1px var(--c); border-color: var(--c); border-top-color: var(--c); }
-.p-more { margin-top: auto; padding-top: 6px; font-size: 14px; font-weight: 600; color: var(--c); }
+.p-more { margin-top: auto; padding-top: 6px; font-size: 14px; font-weight: 600; color: color-mix(in srgb, var(--c) 80%, #000); }
 .p-card:hover .p-more { text-decoration: underline; text-underline-offset: 3px; }
 .p-card[hidden] { display: none; }
 .p-top { display: flex; align-items: center; gap: 10px; }
