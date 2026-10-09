@@ -24,38 +24,46 @@ window.SITE = {
 
   // CV 요약 (about 섹션 왼쪽)
   cv: [
-    { label: '지금', value: '소속 / 하는 일을 적어주세요', placeholder: true },
-    { label: '학력', value: '학교 · 전공 · 기간', placeholder: true },
+    { label: '학력', value: '고려대학교 · 컴퓨터학과 · 2학년' },
     { label: '관심 분야', value: 'LLM, 컴퓨터 비전, 데이터 분석 등', placeholder: true },
     { label: '대회', value: '해커톤 · 데이터톤 N회 참가, 수상 N회', placeholder: true },
   ],
 
   // 학력/경력 타임라인 (about 페이지)
   timeline: [
-    { date: '20XX.03 –', title: '학교 / 회사 이름', desc: '전공 또는 직무', color: 'blue', placeholder: true },
-    { date: '20XX.07', title: '첫 해커톤 참가', desc: '어떤 대회였는지 한 줄', color: 'orange', placeholder: true },
+    { date: '2022.03', title: '광주과학고등학교 입학', desc: '', color: 'red' },
+    { date: '2023.03 - .11', title: 'R&E 경진대회 정보과학 분야', desc: '레고 블록 Object Detection 모델 개발', color: 'orange' },
+    { date: '2023.07', title: '전국 과학전람회 참가', desc: 'CNN 기법을 이용한 폐렴 여부 진단 및 정밀도와 재현율, F1 score 분석 / 우수상 수상', color: 'yellow' },
+    { date: '2025.01', title: '광주과학고등학교 졸업', desc: '정보과학 전공', color: 'lime' },
+    { date: '2025.03', title: '고려대학교 컴퓨터학과 입학', desc: '', color: 'green' },
+    { date: '2025.10', title: '첫 해커톤 참가', desc: 'NASA Space Apps Challenge', color: 'teal' },
+    { date: '2025.11', title: '첫 데이터톤 참가', desc: '정보대학 Inthon 데이터톤 트랙', color: 'blue' },
+    { date: '2026.06 - .09', title: 'LG Aimers 9기', desc: '투구 제구 성공률 예측하기 / 리더보드 상위 4퍼센트', color: 'purple' },
+    { date: '2026.08', title: 'AIKU 주니어톤', desc: '손필기 분류하기 / 1위', color: 'pink' },
+    { date: '2026.10', title: '데이터톤 참가', desc: '정보대학 Inthon 데이터톤 트랙', color: 'red' },
+    { date: '2026.11', title: '데이터톤 참가', desc: 'AIKU톤', color: 'orange' },
   ],
 
   // 쓸데없는 about me
   facts: [
-    { color: 'red',    title: '클라이밍', body: '볼더링 위주로 하고, 최고 그레이드는 V?. 홈짐은 어디인지 알려주세요.', placeholder: true },
-    { color: 'yellow', title: '좋아하는 것', body: '커피? 게임? 여기에 채워주세요.', placeholder: true },
+    { color: 'red',    title: '클라이밍', body: '볼더링 위주로 하고, 최고 그레이드는 V7. 홈짐: 알레클라임 강동점.' },
+    { color: 'yellow', title: '좋아하는 것', body: '스포츠를 좋아해요. 요즘은 클라이밍과 러닝을 하고있어요.' },
     { color: 'teal',   title: '요즘 빠진 것', body: 'Quordle, chain.le 같은 영어 단어 게임. 한국어 버전을 직접 만드는 중이에요.' },
-    { color: 'purple', title: 'MBTI', body: '????', placeholder: true },
+    { color: 'purple', title: 'MBTI', body: 'ESTP' },
   ],
 
   // 지금 하고 있는 것
   now: [
     { color: 'green',  text: 'yunmin.dev 만드는 중 (지금 보고 계신 이 사이트)' },
     { color: 'blue',   text: '하늘의 별따기 게임 개발 중 → game.yunmin.dev' },
-    { color: 'orange', text: '다음 해커톤 준비 중', placeholder: true },
+    { color: 'orange', text: '다음 해커톤 준비 중' },
   ],
 
   // 기술 스택
   stack: [
     { group: 'AI / ML', color: 'purple', items: ['Python', 'PyTorch', 'scikit-learn'], placeholder: true },
     { group: 'Data',    color: 'teal',   items: ['pandas', 'SQL'], placeholder: true },
-    { group: 'Web',     color: 'orange', items: ['HTML/CSS/JS', 'Cloudflare Workers', 'Supabase'] },
+    { group: 'Web',     color: 'orange', items: ['HTML/CSS/JS', 'Cloudflare Workers', 'Supabase'], placeholder: true },
     { group: 'Tools',   color: 'blue',   items: ['Git', 'Jupyter', 'Claude'], placeholder: true },
   ],
 
@@ -66,18 +74,17 @@ window.SITE = {
    */
   projects: [
     {
-      title: '해커톤 프로젝트 이름',
-      type: 'hackathon',
-      event: '대회명 · 주최',
-      date: '2025.08',
-      result: '수상 내역',
-      role: '맡은 역할',
-      summary: '어떤 문제를 풀었고, 무엇을 만들었는지 두세 줄로 적어주세요.',
-      tags: ['LLM', 'RAG', 'FastAPI'],
+      title: 'AIKU 주니어톤',
+      type: 'datathon',
+      event: '정보대학 인공지능 학회 AIKU',
+      date: '2026.08',
+      result: '1위',
+      role: '팀원',
+      summary: '손글씨 필기 사진을 보고 누구의 것인지 분류하는 문제를 해결하였다. ',
+      tags: ['Image Classification'],
       links: [{ label: 'GitHub', url: 'https://github.com/jungam5222' }],
       color: 'red',
       featured: true,
-      placeholder: true,
     },
     {
       title: '데이터톤 프로젝트 이름',
@@ -133,29 +140,28 @@ window.SITE = {
 
   // 클라이밍 페이지
   climbing: {
-    since: '20XX',
-    best: 'V?',
-    home: '홈짐 이름',
+    since: '2025',
+    best: 'V7',
+    home: '알레클라임 강동점',
     style: '볼더링',
-    placeholder: true,
     // 그레이드별 완등 수 (그래프용). 숫자만 바꾸면 됩니다.
     grades: [
-      { grade: 'V0', count: 0 }, { grade: 'V1', count: 0 }, { grade: 'V2', count: 0 },
-      { grade: 'V3', count: 0 }, { grade: 'V4', count: 0 }, { grade: 'V5', count: 0 },
-      { grade: 'V6', count: 0 },
+      { grade: 'the climb purple', count: 2 }, { grade: 'peakers black', count: 2 }, { grade: 'sonsangwon pink', count: 2 },
+      { grade: 'damjang black', count: 3 }, { grade: 'seoul forest black', count: 0 }, { grade: 'allez pink', count: 13 },
+      { grade: 'allez black', count: 1 },
     ],
     // 최근 완등 기록
     log: [
-      { date: '2026.10.05', gym: '암장 이름', grade: 'V?', color: 'yellow', note: '기억에 남는 문제 한 줄', placeholder: true },
+      { date: '2026.07.12', gym: 'peakers 신촌', grade: 'black', color: 'yellow', note: '피커스 첫 검정, 패들패들' },
     ],
     gyms: [
-      { name: '자주 가는 암장', area: '지역', note: '한 줄 평', placeholder: true },
+      { name: 'allez', area: '강동', note: 'dynamic! crimp is dangerous.' },
     ],
   },
 
   // 다른 서브도메인
   elsewhere: [
-    { title: 'game.yunmin.dev', desc: '하늘의 별따기를 시작으로 Quordle, chain.le 한국어판 같은 웹 게임들.', url: 'https://game.yunmin.dev', color: 'yellow', status: '준비 중' },
+    { title: 'game.yunmin.dev', desc: '하늘의 별따기를 시작으로 Quordle, chain.le 한국어판 같은 웹 게임들.', url: 'https://game.yunmin.dev', color: 'yellow', status: '운영 중' },
     { title: 'portfolio.yunmin.dev', desc: '경력과 프로젝트를 간결하게 정리한 CV.', url: 'https://portfolio.yunmin.dev', color: 'blue', status: '준비 중' },
   ],
 };
