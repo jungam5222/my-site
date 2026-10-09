@@ -434,5 +434,5 @@ a.row-card:hover .row-arrow { color: var(--c); }
   .climb-log li { grid-template-columns: 34px 1fr auto; }
   .climb-log li .tag { display: none; }
   .p-grid { grid-template-columns: 1fr; }
-  .wall-hint { font-size: 11.5px; }
+  .wall-hint { font-size: 11.5px; bottom: 8px; }
 }
