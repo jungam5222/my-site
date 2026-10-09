@@ -1,3 +1,5 @@
 .git
 wrangler.jsonc
 README.md
+.wrangler
+node_modules

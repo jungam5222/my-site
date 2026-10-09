@@ -3,23 +3,104 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>홍윤민 | 포트폴리오</title>
-  <link rel="stylesheet" href="/style.css">
+  <title>홍윤민 · yunmin.dev</title>
+  <meta name="description" content="AI 개발자 홍윤민의 작업실. 해커톤·데이터톤 프로젝트, 웹 개발 실험, 그리고 클라이밍.">
+  <meta property="og:title" content="홍윤민 · yunmin.dev">
+  <meta property="og:description" content="AI 개발자 홍윤민의 작업실. 만들고, 배우고, 오릅니다.">
+  <meta property="og:url" content="https://yunmin.dev/">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#FBF8F1">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="/assets/css/site.css">
 </head>
-<body>
-  <header>
-    <h1>홍윤민</h1>
-    <p>한 줄 자기소개</p>
-    <nav><a href="#projects">프로젝트</a> · <a href="/game/">게임하기</a> · <a href="mailto:me@example.com">연락하기</a></nav>
-  </header>
-  <main>
-    <section id="projects">
-      <h2>프로젝트</h2>
-      <article>
-        <h3>프로젝트 이름</h3>
-        <p>무엇을 만들었고 내가 맡은 역할</p>
-      </article>
+<body data-page="home">
+  <a class="skip" href="#main">본문으로 건너뛰기</a>
+  <main id="main">
+    <section class="hero" id="hello" data-color="green" data-title="Hello">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="hero-meta" id="hero-meta"></div>
+          <p class="hero-hello">안녕하세요, 👋</p>
+          <h1 id="hero-name">홍윤민</h1>
+          <p class="hero-tagline" id="hero-tagline"></p>
+          <p class="hero-intro" id="hero-intro"></p>
+          <div class="hero-cta">
+            <a class="btn primary" href="/projects/">프로젝트 보기</a>
+            <a class="btn" href="/about/">더 알아보기</a>
+          </div>
+        </div>
+        <div class="wall" id="wall" role="group" aria-label="클라이밍 벽 미니게임"></div>
+      </div>
+    </section>
+
+    <section id="about" data-color="red" data-title="About">
+      <div class="wrap">
+        <div id="about-head"></div>
+        <div class="about-grid reveal">
+          <div class="panel">
+            <p class="panel-title">CV 요약</p>
+            <div id="about-cv"></div>
+          </div>
+          <div id="about-facts"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="now" data-color="orange" data-title="Now">
+      <div class="wrap">
+        <div id="now-head"></div>
+        <div class="now-grid reveal">
+          <div class="panel">
+            <p class="panel-title">Now</p>
+            <div id="now-list"></div>
+          </div>
+          <div class="panel">
+            <p class="panel-title">Toolbox</p>
+            <div id="stack-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" data-color="blue" data-title="Projects">
+      <div class="wrap">
+        <div id="projects-head"></div>
+        <div class="rows reveal" id="projects-list"></div>
+      </div>
+    </section>
+
+    <section id="lab" data-color="pink" data-title="Lab">
+      <div class="wrap">
+        <div id="lab-head"></div>
+        <div class="rows reveal" id="lab-list"></div>
+      </div>
+    </section>
+
+    <section id="elsewhere" data-color="yellow" data-title="Elsewhere">
+      <div class="wrap">
+        <div id="else-head"></div>
+        <div class="reveal" id="else-list"></div>
+      </div>
+    </section>
+
+    <section id="contact" data-color="purple" data-title="Contact">
+      <div class="wrap">
+        <div class="contact reveal">
+          <h2>같이 뭔가 만들어 볼까요?</h2>
+          <p>해커톤 팀원 구인, 커피챗, 클라이밍 메이트 모두 환영해요.</p>
+          <div class="hero-cta" id="contact-links"></div>
+        </div>
+      </div>
     </section>
   </main>
+
+  <script src="/assets/js/holds.js"></script>
+  <script src="/assets/js/data.js"></script>
+  <script src="/assets/js/site.js"></script>
 </body>
 </html>
