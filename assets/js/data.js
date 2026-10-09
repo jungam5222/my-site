@@ -186,6 +186,14 @@ window.SITE = {
    */
   lab: [
     {
+      title: '하늘의 별따기',
+      desc: '남들이 떠올리지 못한 답일수록 더 높이 날아오르는 한국어 낱말 게임. 영어로만 즐길 수 있던 krillion.io를 한국어로 만들었어요. 하루 7문제, 만점 700점.',
+      date: '2026.10',
+      url: 'https://game.yunmin.dev/starvest/',
+      color: 'yellow',
+      status: 'live',
+    },
+    {
       title: 'Hold Generator',
       desc: '버튼 한 번에 새로운 클라이밍 홀드를 만들어요. 이 사이트의 홀드도 전부 여기서 나왔습니다.',
       date: '2026.10',

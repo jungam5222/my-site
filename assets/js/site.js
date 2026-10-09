@@ -178,7 +178,7 @@
         </span>
         ${tag}
         <span class="row-date">${esc(l.date)}</span>
-        <span class="row-arrow">${l.url ? '→' : ''}</span>`;
+        <span class="row-arrow">${l.url ? (isExternal(l.url) ? '↗' : '→') : ''}</span>`;
     return l.url
       ? `<a class="row-card" href="${l.url}"${linkAttrs(l.url)} style="--c:${hex(l.color)}">${inner}</a>`
       : `<div class="row-card is-disabled" style="--c:${hex(l.color)}">${inner}</div>`;
