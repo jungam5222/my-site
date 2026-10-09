@@ -167,20 +167,24 @@
       </a>`;
   }
 
+  // Lab 주소: slug가 있으면 /lab/<slug>/ 설명 페이지, 없으면 url로 바로
+  const labUrl = (l) => (l.slug ? `/lab/${l.slug}/` : l.url || '');
+  const statusTag = (l) => (l.status === 'live' ? '<span class="status live">live</span>' : '<span class="status">soon</span>');
+
   function labRow(l, i) {
-    const tag = l.status === 'live' ? '<span class="status live">live</span>' : '<span class="status">soon</span>';
+    const url = labUrl(l);
     const inner = `
         <span class="row-num">${pad(i + 1)}</span>
-        <span class="row-hold">${H.svg({ seed: 400 + i, color: l.color, size: 40 })}</span>
+        <span class="row-hold">${H.svg({ seed: 400 + S.lab.indexOf(l), color: l.color, size: 40 })}</span>
         <span class="row-main">
           <span class="row-title">${esc(l.title)}</span>
           <span class="row-sub">${esc(l.desc)}</span>
         </span>
-        ${tag}
+        ${statusTag(l)}
         <span class="row-date">${esc(l.date)}</span>
-        <span class="row-arrow">${l.url ? (isExternal(l.url) ? '↗' : '→') : ''}</span>`;
-    return l.url
-      ? `<a class="row-card" href="${l.url}"${linkAttrs(l.url)} style="--c:${hex(l.color)}">${inner}</a>`
+        <span class="row-arrow">${url ? (isExternal(url) ? '↗' : '→') : ''}</span>`;
+    return url
+      ? `<a class="row-card" href="${url}"${linkAttrs(url)} style="--c:${hex(l.color)}">${inner}</a>`
       : `<div class="row-card is-disabled" style="--c:${hex(l.color)}">${inner}</div>`;
   }
 
@@ -335,6 +339,75 @@
     });
   }
 
+  /* ---------- 상세 페이지 (프로젝트 / Lab 공통) ---------- */
+  // /<base>/<slug>/ 주소에서 slug를 읽고, 같은 폴더의 content.md를 본문으로 그립니다.
+  function renderDetail(cfg) {
+    const root = $('#project');
+    const slug = location.pathname.split('/').filter(Boolean)[1];
+    const p = cfg.list.find((x) => x.slug === slug);
+    if (!p) {
+      root.innerHTML = `<div class="wrap page-hero"><p class="eyebrow">/${cfg.base}/${esc(slug)}</p><h1>${cfg.label}을 찾을 수 없어요</h1>
+        <p class="lead">data.js에 slug: '${esc(slug)}' 항목이 있는지 확인해 주세요.</p>
+        <div class="hero-cta"><a class="btn" href="/${cfg.base}/">← 목록으로</a></div></div>`;
+      return;
+    }
+    document.title = `${p.title} · yunmin.dev`;
+    const k = cfg.list.indexOf(p);
+    const prev = cfg.list[k - 1], next = cfg.list[k + 1];
+    const meta = cfg.meta(p).filter(([, v]) => v);
+    const links = (p.links || []).filter((l) => l.url);
+    const navCard = (x, label, cls) => `<a class="row-card${cls}" href="${cfg.url(x)}"${linkAttrs(cfg.url(x))} style="--c:${hex(x.color)}"><span class="row-main"><span class="row-sub">${label}</span><span class="row-title">${esc(x.title)}</span></span></a>`;
+
+    root.innerHTML = `
+      <header class="page-hero proj-hero" style="--c:${hex(p.color)}">
+        <div class="wrap">
+          <p class="eyebrow"><a href="/${cfg.base}/">/${cfg.base}</a> / ${esc(p.slug)}</p>
+          <div class="proj-title">
+            <div>
+              <div class="p-top">${cfg.tag(p)}<span class="row-date">${esc(p.date)}</span></div>
+              <h1>${esc(p.title)}${ph(p)}</h1>
+              <p class="lead">${esc(cfg.lead(p))}</p>
+            </div>
+            <div class="proj-hold">${H.svg({ seed: cfg.seed(p), color: p.color, size: 132 })}</div>
+          </div>
+        </div>
+      </header>
+      <section class="proj-body-sec">
+        <div class="wrap proj-layout">
+          <aside class="proj-side">
+            <div class="panel">
+              <p class="panel-title">${cfg.panel}</p>
+              <dl class="cv">${meta.map(([k2, v]) => `<div><dt>${k2}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
+              ${(p.tags || []).length ? `<div class="chips proj-tags">${p.tags.map((t) => `<span class="chip">${esc(t)}</span>`).join('')}</div>` : ''}
+              ${links.length ? `<div class="proj-links">${links.map((l, j) =>
+                `<a class="btn${j === 0 ? ' primary' : ''}" href="${l.url}"${linkAttrs(l.url)}>${esc(l.label)} ${isExternal(l.url) ? '↗' : '→'}</a>`).join('')}</div>` : ''}
+            </div>
+          </aside>
+          <article class="prose" id="project-body"><p class="muted">불러오는 중…</p></article>
+        </div>
+      </section>
+      <nav class="wrap proj-nav" aria-label="다른 ${cfg.label}">
+        ${prev ? navCard(prev, cfg.prevLabel, '') : '<span></span>'}
+        ${next ? navCard(next, cfg.nextLabel, ' next') : '<span></span>'}
+      </nav>`;
+
+    const body = $('#project-body');
+    fetch(`/${cfg.base}/${p.slug}/content.md`, { cache: 'no-cache' })
+      .then((r) => (r.ok ? r.text() : Promise.reject(r.status)))
+      .then((md) => {
+        body.innerHTML = window.marked ? window.marked.parse(md) : `<pre>${esc(md)}</pre>`;
+        // 소제목마다 작은 홀드
+        const colors = H.COLOR_KEYS;
+        body.querySelectorAll('h2').forEach((h, j) => {
+          h.insertAdjacentHTML('afterbegin', H.svg({ seed: 1000 + j, color: colors[(colors.indexOf(p.color) + j) % colors.length], size: 26 }));
+        });
+        body.querySelectorAll('a[href^="http"]').forEach((a) => { a.target = '_blank'; a.rel = 'noopener'; });
+      })
+      .catch(() => {
+        body.innerHTML = '<p class="muted">상세 설명을 아직 작성하는 중이에요. 🧗</p>';
+      });
+  }
+
   const fill = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
 
   /* ---------- 페이지별 ---------- */
@@ -397,74 +470,26 @@
     },
 
     project() {
-      const root = $('#project');
-      const slug = location.pathname.split('/').filter(Boolean)[1];
-      const p = S.projects.find((x) => x.slug === slug);
-      if (!p) {
-        root.innerHTML = `<div class="wrap page-hero"><p class="eyebrow">/projects/${esc(slug)}</p><h1>프로젝트를 찾을 수 없어요</h1>
-          <p class="lead">data.js의 projects에 slug: '${esc(slug)}' 항목이 있는지 확인해 주세요.</p>
-          <div class="hero-cta"><a class="btn" href="/projects/">← 모든 프로젝트</a></div></div>`;
-        return;
-      }
-      document.title = `${p.title} · yunmin.dev`;
       const sorted = S.projects.slice().sort((a, b) => String(b.date).localeCompare(String(a.date)));
-      const k = sorted.indexOf(p);
-      const prev = sorted[k - 1], next = sorted[k + 1];
-      const meta = [['대회', p.event], ['기간', p.period || p.date], ['결과', p.result], ['역할', p.role], ['팀', p.team]]
-        .filter(([, v]) => v);
-      const links = (p.links || []).filter((l) => l.url);
+      renderDetail({
+        base: 'projects', list: sorted, label: '프로젝트', panel: '프로젝트 정보',
+        url: projectUrl, seed: projectSeed,
+        tag: (p) => `<span class="tag" style="--c:${hex(TYPE_COLOR[p.type])}">${TYPE_LABEL[p.type] || p.type}</span>`,
+        lead: (p) => p.summary,
+        meta: (p) => [['대회', p.event], ['기간', p.period || p.date], ['결과', p.result], ['역할', p.role], ['팀', p.team]],
+        prevLabel: '← 최근 프로젝트', nextLabel: '이전 프로젝트 →',
+      });
+    },
 
-      root.innerHTML = `
-        <header class="page-hero proj-hero" style="--c:${hex(p.color)}">
-          <div class="wrap">
-            <p class="eyebrow"><a href="/projects/">/projects</a> / ${esc(p.slug)}</p>
-            <div class="proj-title">
-              <div>
-                <div class="p-top">
-                  <span class="tag" style="--c:${hex(TYPE_COLOR[p.type])}">${TYPE_LABEL[p.type] || p.type}</span>
-                  <span class="row-date">${esc(p.date)}</span>
-                </div>
-                <h1>${esc(p.title)}${ph(p)}</h1>
-                <p class="lead">${esc(p.summary)}</p>
-              </div>
-              <div class="proj-hold">${H.svg({ seed: projectSeed(p), color: p.color, size: 132 })}</div>
-            </div>
-          </div>
-        </header>
-        <section class="proj-body-sec">
-          <div class="wrap proj-layout">
-            <aside class="proj-side">
-              <div class="panel">
-                <p class="panel-title">프로젝트 정보</p>
-                <dl class="cv">${meta.map(([k2, v]) => `<div><dt>${k2}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
-                ${(p.tags || []).length ? `<div class="chips proj-tags">${p.tags.map((t) => `<span class="chip">${esc(t)}</span>`).join('')}</div>` : ''}
-                ${links.length ? `<div class="proj-links">${links.map((l, j) =>
-                  `<a class="btn${j === 0 ? ' primary' : ''}" href="${l.url}"${linkAttrs(l.url)}>${esc(l.label)} ↗</a>`).join('')}</div>` : ''}
-              </div>
-            </aside>
-            <article class="prose" id="project-body"><p class="muted">불러오는 중…</p></article>
-          </div>
-        </section>
-        <nav class="wrap proj-nav" aria-label="다른 프로젝트">
-          ${prev ? `<a class="row-card" href="${projectUrl(prev)}" style="--c:${hex(prev.color)}"><span class="row-main"><span class="row-sub">← 최근 프로젝트</span><span class="row-title">${esc(prev.title)}</span></span></a>` : '<span></span>'}
-          ${next ? `<a class="row-card next" href="${projectUrl(next)}" style="--c:${hex(next.color)}"><span class="row-main"><span class="row-sub">이전 프로젝트 →</span><span class="row-title">${esc(next.title)}</span></span></a>` : '<span></span>'}
-        </nav>`;
-
-      const body = $('#project-body');
-      fetch(`/projects/${p.slug}/content.md`, { cache: 'no-cache' })
-        .then((r) => (r.ok ? r.text() : Promise.reject(r.status)))
-        .then((md) => {
-          body.innerHTML = window.marked ? window.marked.parse(md) : `<pre>${esc(md)}</pre>`;
-          // 소제목마다 작은 홀드
-          const colors = H.COLOR_KEYS;
-          body.querySelectorAll('h2').forEach((h, j) => {
-            h.insertAdjacentHTML('afterbegin', H.svg({ seed: 1000 + j, color: colors[(colors.indexOf(p.color) + j) % colors.length], size: 26 }));
-          });
-          body.querySelectorAll('a[href^="http"]').forEach((a) => { a.target = '_blank'; a.rel = 'noopener'; });
-        })
-        .catch(() => {
-          body.innerHTML = '<p class="muted">상세 설명을 아직 작성하는 중이에요. 🧗</p>';
-        });
+    'lab-item'() {
+      renderDetail({
+        base: 'lab', list: S.lab.filter((l) => l.slug || l.url), label: '실험', panel: '실험 정보',
+        url: labUrl, seed: (l) => 400 + S.lab.indexOf(l),
+        tag: (l) => statusTag(l),
+        lead: (l) => l.desc,
+        meta: (l) => [['날짜', l.period || l.date], ['상태', l.status === 'live' ? '운영 중' : '준비 중'], ['역할', l.role]],
+        prevLabel: '← 이전 실험', nextLabel: '다음 실험 →',
+      });
     },
 
     lab() {

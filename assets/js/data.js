@@ -182,14 +182,22 @@ window.SITE = {
 
   /*
    * Lab: 웹 개발 실험 공간
-   * url은 /lab/폴더명/ 형식으로 만들면 됩니다.
+   * slug가 있으면 /lab/<slug>/ 설명 페이지를 거쳐 갑니다 (프로젝트와 같은 방식).
+   *   설명은 lab/<slug>/content.md 에 쓰고, 실제 링크는 links에 넣으세요.
+   *   새로 만들 땐 lab/_template 폴더를 복사해서 이름을 slug로 바꾸면 돼요.
+   * slug 없이 url만 있으면 그 주소로 바로 이동합니다.
    */
   lab: [
     {
       title: '하늘의 별따기',
       desc: '남들이 떠올리지 못한 답일수록 더 높이 날아오르는 한국어 낱말 게임. 영어로만 즐길 수 있던 krillion.io를 한국어로 만들었어요. 하루 7문제, 만점 700점.',
       date: '2026.10',
-      url: 'https://game.yunmin.dev/starvest/',
+      slug: 'starvest',
+      tags: ['Web Game', 'HTML/JS', 'Python'],
+      links: [
+        { label: '게임 하러 가기', url: 'https://game.yunmin.dev/starvest/' },
+        { label: 'GitHub', url: 'https://github.com/jungam5222/game-dev' },
+      ],
       color: 'yellow',
       status: 'live',
     },

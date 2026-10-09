@@ -38,7 +38,9 @@ projects/<slug>/      프로젝트 상세 (index.html은 공통, content.md에 �
 
 GitHub 같은 링크는 `data.js`의 `links`에 넣으면 상세 페이지에 버튼으로 나와요. `_template` 폴더는 배포되지 않아요.
 
-새 Lab 실험은 `lab/<이름>/index.html`을 만들고 `data.js`의 `lab`에 한 줄 추가하면 됩니다.
+## Lab 설명 페이지
+
+Lab 항목에 `slug`가 있으면 `/lab/<slug>/` 설명 페이지를 거쳐 갑니다. 만드는 방법은 프로젝트와 같고, `lab/_template` 폴더를 복사해서 `content.md`를 쓰면 돼요. 게임 주소 같은 실제 링크는 `links`에 넣어요. `slug` 없이 `url`만 있으면 그 주소로 바로 이동합니다 (예: Hold Generator).
 
 ## 로컬에서 보기
 
