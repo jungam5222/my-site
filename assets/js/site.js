@@ -140,7 +140,7 @@
         <span class="row-hold">${H.svg({ seed: projectSeed(p), color: p.color, size: 40 })}</span>
         <span class="row-main">
           <span class="row-title">${esc(p.title)}${ph(p)}</span>
-          <span class="row-sub">${esc(p.event)} · ${esc(p.result)}</span>
+          <span class="row-sub">${[p.event, p.result].filter(Boolean).map(esc).join(' · ')}</span>
         </span>
         <span class="tag" style="--c:${hex(TYPE_COLOR[p.type])}">${TYPE_LABEL[p.type] || p.type}</span>
         <span class="row-date">${esc(p.date)}</span>
@@ -159,9 +159,9 @@
         <div class="p-hold">${H.svg({ seed: projectSeed(p), color: p.color, size: 72 })}</div>
         <h3>${esc(p.title)}${ph(p)}</h3>
         <p class="p-event">${esc(p.event)}</p>
-        <p class="p-result">🏆 ${esc(p.result)}</p>
-        <p>${esc(p.summary)}</p>
-        <p class="p-role"><b>역할</b> ${esc(p.role)}</p>
+        ${p.result ? `<p class="p-result">🏆 ${esc(p.result)}</p>` : ''}
+        ${p.summary ? `<p>${esc(p.summary)}</p>` : ''}
+        ${p.role ? `<p class="p-role"><b>역할</b> ${esc(p.role)}</p>` : ''}
         <div class="chips">${(p.tags || []).map((t) => `<span class="chip">${esc(t)}</span>`).join('')}</div>
         <span class="p-more">자세히 보기 →</span>
       </a>`;
