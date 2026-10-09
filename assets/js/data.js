@@ -22,10 +22,11 @@ window.SITE = {
      * 이메일은 'mailto:주소' 형식으로 적어주세요.
      */
     contacts: [
-      { label: 'Email',          url: '' },  // 'mailto:you@example.com'
+      { label: 'Email',          url: 'mailto:hym1029384756@gmail.com' },  // 'mailto:you@example.com'
+      { label: 'Email',          url: 'mailto:jungam5222@naver.com' },
       { label: 'GitHub',         url: 'https://github.com/jungam5222' },
-      { label: 'LinkedIn',       url: '' },  // 'https://www.linkedin.com/in/아이디'
-      { label: 'Blog',           url: '' },  // velog, tistory, medium 등
+      { label: 'LinkedIn',       url: 'https://www.linkedin.com/in/윤민-홍-829857381' },  // 'https://www.linkedin.com/in/아이디'
+      { label: 'Blog',           url: 'https://m.blog.naver.com/jungam5222' },  // velog, tistory, medium 등
       { label: 'Kaggle',         url: '' },  // 'https://www.kaggle.com/아이디'
       { label: 'DACON',          url: '' },  // 'https://dacon.io/myprofile/번호'
       { label: 'Hugging Face',   url: '' },  // 'https://huggingface.co/아이디'
@@ -34,8 +35,8 @@ window.SITE = {
       { label: 'LeetCode',       url: '' },
       { label: 'Stack Overflow', url: '' },
       { label: 'X',              url: '' },  // 'https://x.com/아이디'
-      { label: 'Instagram',      url: '' },
-      { label: 'Discord',        url: '' },
+      { label: 'Instagram',      url: 'https://www.instagram.com/oeee._.eeeo' },
+      { label: 'Discord',        url: 'https://discord.gg/4aBJjXBq' },
       { label: '오픈채팅',        url: '' },  // 카카오톡 오픈채팅 링크
       { label: '이력서',          url: '' },  // PDF 링크 (예: '/assets/resume.pdf')
     ],
