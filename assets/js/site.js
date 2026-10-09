@@ -17,6 +17,14 @@
   const isExternal = (url) => /^https?:/.test(url);
   const linkAttrs = (url) => (isExternal(url) ? ' target="_blank" rel="noopener"' : '');
 
+  // 번호가 붙는 것들(섹션, 프로젝트, Lab, 타임라인)은 이 순서대로 색을 받습니다
+  const ORDER = H.COLOR_KEYS; // 빨강 주황 노랑 연두 초록 청록 파랑 보라 분홍
+  const seq = (i) => ORDER[((i % ORDER.length) + ORDER.length) % ORDER.length];
+  const byDate = (a, b) => String(b.date).localeCompare(String(a.date));
+  const projectsSorted = S.projects.slice().sort(byDate);
+  const projectColor = (p) => seq(projectsSorted.indexOf(p));
+  const labColor = (l) => seq(S.lab.indexOf(l));
+
   const TYPE_LABEL = { hackathon: '해커톤', datathon: '데이터톤', project: '프로젝트' };
   const TYPE_COLOR = { hackathon: 'red', datathon: 'blue', project: 'green' };
 
@@ -49,12 +57,9 @@
   }
 
   /* ---------- 공통: 푸터 ---------- */
+  // data.js의 profile.contacts 중 url을 채운 것만 보여줍니다
   function contactLinks() {
-    const out = [];
-    if (P.email) out.push({ label: 'Email', url: `mailto:${P.email}` });
-    if (P.github) out.push({ label: 'GitHub', url: `https://github.com/${P.github}` });
-    (P.links || []).forEach((l) => out.push(l));
-    return out;
+    return (P.contacts || []).filter((c) => c.url && c.url.trim());
   }
 
   function renderFooter() {
@@ -93,9 +98,10 @@
 
   /* ---------- 섹션 제목 (루트 테이프 모양) ---------- */
   function secHead(num, title, sub, color, more) {
+    if (/^\d+$/.test(num)) color = seq(+num - 1);
     return `
       <div class="sec-head">
-        <span class="tape" style="--c:${hex(color)}">${num}</span>
+        <span class="tape${['yellow', 'lime'].includes(color) ? ' light' : ''}" style="--c:${hex(color)}">${num}</span>
         <h2>${title}</h2>
         ${sub ? `<span class="sec-sub">${sub}</span>` : ''}
         ${more ? `<a class="sec-more" href="${more}">전체 보기 →</a>` : ''}
@@ -135,9 +141,9 @@
 
   function projectRow(p, i) {
     return `
-      <a class="row-card" href="${projectUrl(p)}" style="--c:${hex(p.color)}">
-        <span class="row-num">${pad(i + 1)}</span>
-        <span class="row-hold">${H.svg({ seed: projectSeed(p), color: p.color, size: 40 })}</span>
+      <a class="row-card" href="${projectUrl(p)}" style="--c:${hex(projectColor(p))}">
+        <span class="row-num">${pad(projectsSorted.indexOf(p) + 1)}</span>
+        <span class="row-hold">${H.svg({ seed: projectSeed(p), color: projectColor(p), size: 40 })}</span>
         <span class="row-main">
           <span class="row-title">${esc(p.title)}${ph(p)}</span>
           <span class="row-sub">${[p.event, p.result].filter(Boolean).map(esc).join(' · ')}</span>
@@ -150,13 +156,13 @@
 
   function projectCard(p, i) {
     return `
-      <a class="p-card" href="${projectUrl(p)}" data-type="${p.type}" style="--c:${hex(p.color)}">
+      <a class="p-card" href="${projectUrl(p)}" data-type="${p.type}" style="--c:${hex(projectColor(p))}">
         <div class="p-top">
           <span class="row-num">${pad(i + 1)}</span>
           <span class="tag" style="--c:${hex(TYPE_COLOR[p.type])}">${TYPE_LABEL[p.type] || p.type}</span>
           <span class="row-date">${esc(p.date)}</span>
         </div>
-        <div class="p-hold">${H.svg({ seed: projectSeed(p), color: p.color, size: 72 })}</div>
+        <div class="p-hold">${H.svg({ seed: projectSeed(p), color: projectColor(p), size: 72 })}</div>
         <h3>${esc(p.title)}${ph(p)}</h3>
         <p class="p-event">${esc(p.event)}</p>
         ${p.result ? `<p class="p-result">🏆 ${esc(p.result)}</p>` : ''}
@@ -175,7 +181,7 @@
     const url = labUrl(l);
     const inner = `
         <span class="row-num">${pad(i + 1)}</span>
-        <span class="row-hold">${H.svg({ seed: 400 + S.lab.indexOf(l), color: l.color, size: 40 })}</span>
+        <span class="row-hold">${H.svg({ seed: 400 + S.lab.indexOf(l), color: labColor(l), size: 40 })}</span>
         <span class="row-main">
           <span class="row-title">${esc(l.title)}</span>
           <span class="row-sub">${esc(l.desc)}</span>
@@ -184,8 +190,8 @@
         <span class="row-date">${esc(l.date)}</span>
         <span class="row-arrow">${url ? (isExternal(url) ? '↗' : '→') : ''}</span>`;
     return url
-      ? `<a class="row-card" href="${url}"${linkAttrs(url)} style="--c:${hex(l.color)}">${inner}</a>`
-      : `<div class="row-card is-disabled" style="--c:${hex(l.color)}">${inner}</div>`;
+      ? `<a class="row-card" href="${url}"${linkAttrs(url)} style="--c:${hex(labColor(l))}">${inner}</a>`
+      : `<div class="row-card is-disabled" style="--c:${hex(labColor(l))}">${inner}</div>`;
   }
 
   function elsewhereCards() {
@@ -356,10 +362,10 @@
     const prev = cfg.list[k - 1], next = cfg.list[k + 1];
     const meta = cfg.meta(p).filter(([, v]) => v && v !== '—');
     const links = (p.links || []).filter((l) => l.url);
-    const navCard = (x, label, cls) => `<a class="row-card${cls}" href="${cfg.url(x)}"${linkAttrs(cfg.url(x))} style="--c:${hex(x.color)}"><span class="row-main"><span class="row-sub">${label}</span><span class="row-title">${esc(x.title)}</span></span></a>`;
+    const navCard = (x, label, cls) => `<a class="row-card${cls}" href="${cfg.url(x)}"${linkAttrs(cfg.url(x))} style="--c:${hex(cfg.color(x))}"><span class="row-main"><span class="row-sub">${label}</span><span class="row-title">${esc(x.title)}</span></span></a>`;
 
     root.innerHTML = `
-      <header class="page-hero proj-hero" style="--c:${hex(p.color)}">
+      <header class="page-hero proj-hero" style="--c:${hex(cfg.color(p))}">
         <div class="wrap">
           <p class="eyebrow"><a href="/${cfg.base}/">/${cfg.base}</a> / ${esc(p.slug)}</p>
           <div class="proj-title">
@@ -368,7 +374,7 @@
               <h1>${esc(p.title)}${ph(p)}</h1>
               <p class="lead">${esc(cfg.lead(p))}</p>
             </div>
-            <div class="proj-hold">${H.svg({ seed: cfg.seed(p), color: p.color, size: 132 })}</div>
+            <div class="proj-hold">${H.svg({ seed: cfg.seed(p), color: cfg.color(p), size: 132 })}</div>
           </div>
         </div>
       </header>
@@ -400,7 +406,7 @@
         // 소제목마다 작은 홀드
         const colors = H.COLOR_KEYS;
         body.querySelectorAll('h2').forEach((h, j) => {
-          h.insertAdjacentHTML('afterbegin', H.svg({ seed: 1000 + j, color: colors[(colors.indexOf(p.color) + j) % colors.length], size: 26 }));
+          h.insertAdjacentHTML('afterbegin', H.svg({ seed: 1000 + j, color: colors[(colors.indexOf(cfg.color(p)) + j) % colors.length], size: 26 }));
         });
         body.querySelectorAll('a[href^="http"]').forEach((a) => { a.target = '_blank'; a.rel = 'noopener'; });
       })
@@ -426,7 +432,7 @@
       fill('now-list', nowList());
       fill('stack-list', stackList());
       fill('projects-head', secHead('03', 'Projects', '해커톤 · 데이터톤 · 사이드 프로젝트', 'blue', '/projects/'));
-      fill('projects-list', S.projects.filter((p) => p.featured).map(projectRow).join(''));
+      fill('projects-list', projectsSorted.filter((p) => p.featured).map(projectRow).join(''));
       fill('lab-head', secHead('04', 'Lab', '웹 개발 놀이터', 'pink', '/lab/'));
       fill('lab-list', S.lab.map(labRow).join(''));
       fill('else-head', secHead('05', 'Elsewhere', 'yunmin.dev의 다른 방들', 'yellow'));
@@ -441,8 +447,8 @@
       fill('about-cv', cvList());
       fill('tl-head', secHead('02', '지나온 길', '', 'blue'));
       fill('timeline', S.timeline.map((t, i) => `
-        <li style="--c:${hex(t.color)}">
-          <span class="tl-hold">${H.svg({ seed: 700 + i, color: t.color, size: 30 })}</span>
+        <li style="--c:${hex(seq(i))}">
+          <span class="tl-hold">${H.svg({ seed: 700 + i, color: seq(i), size: 30 })}</span>
           <span class="tl-date">${esc(t.date)}</span>
           <div><p class="tl-title">${esc(t.title)}${ph(t)}</p><p class="muted">${esc(t.desc)}</p></div>
         </li>`).join(''));
@@ -455,7 +461,7 @@
 
     projects() {
       const list = $('#project-grid');
-      const sorted = S.projects.slice().sort((a, b) => String(b.date).localeCompare(String(a.date)));
+      const sorted = projectsSorted;
       list.innerHTML = sorted.map(projectCard).join('');
       const counts = sorted.reduce((m, p) => ((m[p.type] = (m[p.type] || 0) + 1), m), {});
       const filters = [['all', '전체', sorted.length], ...Object.keys(TYPE_LABEL).map((k) => [k, TYPE_LABEL[k], counts[k] || 0])];
@@ -471,9 +477,8 @@
     },
 
     project() {
-      const sorted = S.projects.slice().sort((a, b) => String(b.date).localeCompare(String(a.date)));
       renderDetail({
-        base: 'projects', list: sorted, label: '프로젝트', panel: '프로젝트 정보',
+        base: 'projects', list: projectsSorted, color: projectColor, label: '프로젝트', panel: '프로젝트 정보',
         url: projectUrl, seed: projectSeed,
         tag: (p) => `<span class="tag" style="--c:${hex(TYPE_COLOR[p.type])}">${TYPE_LABEL[p.type] || p.type}</span>`,
         lead: (p) => p.summary,
@@ -484,7 +489,7 @@
 
     'lab-item'() {
       renderDetail({
-        base: 'lab', list: S.lab.filter((l) => l.slug || l.url), label: '실험', panel: '실험 정보',
+        base: 'lab', list: S.lab.filter((l) => l.slug || l.url), color: labColor, label: '실험', panel: '실험 정보',
         url: labUrl, seed: (l) => 400 + S.lab.indexOf(l),
         tag: (l) => statusTag(l),
         lead: (l) => l.desc,

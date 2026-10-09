@@ -3,6 +3,8 @@
  * HTML은 건드리지 않고 이 파일만 수정하면 모든 페이지에 반영돼요.
  *
  * 색 이름: red, orange, yellow, lime, green, teal, blue, purple, pink
+ * 번호가 붙는 것들(섹션 제목, 타임라인, 프로젝트, Lab)은 위 순서대로 색이 자동으로 정해져요.
+ *   프로젝트는 날짜가 최신인 것부터, Lab과 타임라인은 적힌 순서대로입니다.
  * placeholder: true 인 항목은 '예시' 배지가 붙습니다. 실제 내용으로 바꾸면 지워주세요.
  */
 window.SITE = {
@@ -15,10 +17,27 @@ window.SITE = {
     tagline: '해커톤과 데이터톤에서 문제를 풀고, 주말에는 벽을 오릅니다.',
     // 메인 화면 소개 문단
     intro: '모델을 만들고 데이터를 다루는 AI 개발자입니다. 이곳은 제가 만든 것과 배운 것, 그리고 그냥 해보고 싶었던 것들을 자유롭게 올려두는 작업실이에요.',
-    email: '',            // 예: 'hello@yunmin.dev' (비워두면 표시 안 함)
-    github: 'jungam5222',
-    links: [
-      // { label: 'LinkedIn', url: 'https://www.linkedin.com/in/...' },
+    /*
+     * 연락처 / 링크: url을 채운 것만 사이트에 나와요. 순서대로 표시됩니다.
+     * 이메일은 'mailto:주소' 형식으로 적어주세요.
+     */
+    contacts: [
+      { label: 'Email',          url: '' },  // 'mailto:you@example.com'
+      { label: 'GitHub',         url: 'https://github.com/jungam5222' },
+      { label: 'LinkedIn',       url: '' },  // 'https://www.linkedin.com/in/아이디'
+      { label: 'Blog',           url: '' },  // velog, tistory, medium 등
+      { label: 'Kaggle',         url: '' },  // 'https://www.kaggle.com/아이디'
+      { label: 'DACON',          url: '' },  // 'https://dacon.io/myprofile/번호'
+      { label: 'Hugging Face',   url: '' },  // 'https://huggingface.co/아이디'
+      { label: 'Google Scholar', url: '' },
+      { label: 'solved.ac',      url: '' },  // 'https://solved.ac/profile/아이디'
+      { label: 'LeetCode',       url: '' },
+      { label: 'Stack Overflow', url: '' },
+      { label: 'X',              url: '' },  // 'https://x.com/아이디'
+      { label: 'Instagram',      url: '' },
+      { label: 'Discord',        url: '' },
+      { label: '오픈채팅',        url: '' },  // 카카오톡 오픈채팅 링크
+      { label: '이력서',          url: '' },  // PDF 링크 (예: '/assets/resume.pdf')
     ],
   },
 
@@ -31,17 +50,17 @@ window.SITE = {
 
   // 학력/경력 타임라인 (about 페이지)
   timeline: [
-    { date: '2022.03', title: '광주과학고등학교 입학', desc: '', color: 'red' },
-    { date: '2023.03 - .11', title: 'R&E 경진대회 정보과학 분야', desc: '레고 블록 Object Detection 모델 개발', color: 'orange' },
-    { date: '2023.07', title: '전국 과학전람회 참가', desc: 'CNN 기법을 이용한 폐렴 여부 진단 및 정밀도와 재현율, F1 score 분석 / 우수상 수상', color: 'yellow' },
-    { date: '2025.01', title: '광주과학고등학교 졸업', desc: '정보과학 전공', color: 'lime' },
-    { date: '2025.03', title: '고려대학교 컴퓨터학과 입학', desc: '', color: 'green' },
-    { date: '2025.10', title: '첫 해커톤 참가', desc: 'NASA Space Apps Challenge', color: 'teal' },
-    { date: '2025.11', title: '첫 데이터톤 참가', desc: '정보대학 Inthon 데이터톤 트랙', color: 'blue' },
-    { date: '2026.06 - .09', title: 'LG Aimers 9기', desc: '투구 제구 성공률 예측하기 / 리더보드 상위 4퍼센트', color: 'purple' },
-    { date: '2026.08', title: 'AIKU 주니어톤', desc: '손필기 분류하기 / 1위', color: 'pink' },
-    { date: '2026.10', title: '데이터톤 참가', desc: '정보대학 Inthon 데이터톤 트랙', color: 'red' },
-    { date: '2026.11', title: '데이터톤 참가', desc: 'AIKU톤', color: 'orange' },
+    { date: '2022.03', title: '광주과학고등학교 입학', desc: '' },
+    { date: '2023.03 - .11', title: 'R&E 경진대회 정보과학 분야', desc: '레고 블록 Object Detection 모델 개발' },
+    { date: '2023.07', title: '전국 과학전람회 참가', desc: 'CNN 기법을 이용한 폐렴 여부 진단 및 정밀도와 재현율, F1 score 분석 / 우수상 수상' },
+    { date: '2025.01', title: '광주과학고등학교 졸업', desc: '정보과학 전공' },
+    { date: '2025.03', title: '고려대학교 컴퓨터학과 입학', desc: '' },
+    { date: '2025.10', title: '첫 해커톤 참가', desc: 'NASA Space Apps Challenge' },
+    { date: '2025.11', title: '첫 데이터톤 참가', desc: '정보대학 Inthon 데이터톤 트랙' },
+    { date: '2026.06 - .09', title: 'LG Aimers 9기', desc: '투구 제구 성공률 예측하기 / 리더보드 상위 4퍼센트' },
+    { date: '2026.08', title: 'AIKU 주니어톤', desc: '손필기 분류하기 / 1위' },
+    { date: '2026.10', title: '데이터톤 참가', desc: '정보대학 Inthon 데이터톤 트랙' },
+    { date: '2026.11', title: '데이터톤 참가', desc: 'AIKU톤' },
   ],
 
   // 쓸데없는 about me
@@ -89,7 +108,6 @@ window.SITE = {
       summary: '클라이밍 홀드를 모티프로 만든 개인 웹사이트. Cloudflare Workers에 정적 파일로 배포하고, 홀드는 전부 코드로 그립니다.',
       tags: ['HTML', 'CSS', 'JS', 'Cloudflare'],
       links: [{ label: 'GitHub', url: 'https://github.com/jungam5222/my-site' }],
-      color: 'green',
       featured: true,
     },
     {
@@ -103,7 +121,6 @@ window.SITE = {
       summary: '손글씨 필기 사진을 보고 누구의 것인지 분류하는 문제를 해결하였다. ',
       tags: ['Image Classification'],
       links: [{ label: 'GitHub', url: 'https://github.com/jungam5222' }],
-      color: 'red',
       featured: true,
     },
     {
@@ -118,7 +135,6 @@ window.SITE = {
       summary: '투구 데이터를 바탕으로 제구 성공률을 예측하는 문제.',
       tags: [],
       links: [],
-      color: 'purple',
       featured: true,
     },
     {
@@ -132,7 +148,6 @@ window.SITE = {
       summary: '첫 데이터톤 참가.',
       tags: [],
       links: [],
-      color: 'blue',
       featured: true,
     },
     {
@@ -146,7 +161,6 @@ window.SITE = {
       summary: '첫 해커톤 참가.',
       tags: [],
       links: [],
-      color: 'teal',
       featured: true,
     },
     {
@@ -160,7 +174,6 @@ window.SITE = {
       summary: 'CNN 기법으로 폐렴 여부를 진단하고 정밀도, 재현율, F1 score를 분석.',
       tags: ['CNN', 'Image Classification'],
       links: [],
-      color: 'yellow',
       featured: false,
     },
     {
@@ -175,7 +188,6 @@ window.SITE = {
       summary: '레고 블록을 찾아내는 Object Detection 모델 개발.',
       tags: ['Object Detection'],
       links: [],
-      color: 'orange',
       featured: false,
     },
   ],
@@ -198,7 +210,6 @@ window.SITE = {
         { label: '게임 하러 가기', url: 'https://game.yunmin.dev/starvest/' },
         { label: 'GitHub', url: 'https://github.com/jungam5222/game-dev' },
       ],
-      color: 'yellow',
       status: 'live',
     },
     {
@@ -210,7 +221,6 @@ window.SITE = {
       content: '/projects/yunmin-dev/content.md',
       tags: ['HTML', 'CSS', 'JS', 'Cloudflare'],
       links: [{ label: 'GitHub', url: 'https://github.com/jungam5222/my-site' }],
-      color: 'green',
       status: 'live',
     },
     {
@@ -220,7 +230,6 @@ window.SITE = {
       slug: 'portfolio',
       tags: ['CV'],
       links: [],
-      color: 'blue',
       status: 'soon',
     },
     {
@@ -228,7 +237,6 @@ window.SITE = {
       desc: '버튼 한 번에 새로운 클라이밍 홀드를 만들어요. 이 사이트의 홀드도 전부 여기서 나왔습니다.',
       date: '2026.10',
       url: '/lab/holds/',
-      color: 'pink',
       status: 'live',
     },
     {
@@ -236,7 +244,6 @@ window.SITE = {
       desc: '만들고 싶은 걸 여기 하나씩 추가할 예정.',
       date: '—',
       url: '',
-      color: 'lime',
       status: 'soon',
     },
   ],
