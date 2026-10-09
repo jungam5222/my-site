@@ -26,7 +26,7 @@
   const labColor = (l) => seq(S.lab.indexOf(l));
 
   const TYPE_LABEL = { hackathon: '해커톤', datathon: '데이터톤', project: '프로젝트' };
-  const TYPE_COLOR = { hackathon: 'red', datathon: 'blue', project: 'green' };
+  const TYPE_COLOR = { hackathon: 'pink', datathon: 'yellow', project: 'green' };
 
   const NAV = [
     { key: 'about', label: 'About', url: '/about/' },
@@ -101,7 +101,7 @@
     if (/^\d+$/.test(num)) color = seq(+num - 1);
     return `
       <div class="sec-head">
-        <span class="tape${['yellow', 'lime'].includes(color) ? ' light' : ''}" style="--c:${hex(color)}">${num}</span>
+        <span class="tape" style="--c:${hex(color)}">${num}</span>
         <h2>${title}</h2>
         ${sub ? `<span class="sec-sub">${sub}</span>` : ''}
         ${more ? `<a class="sec-more" href="${more}">전체 보기 →</a>` : ''}
