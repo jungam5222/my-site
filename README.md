@@ -24,7 +24,19 @@ assets/css/site.css   전체 스타일
 assets/js/holds.js    클라이밍 홀드 SVG 생성기
 assets/js/data.js     사이트 내용
 assets/js/site.js     헤더/푸터와 각 페이지 렌더링
+assets/vendor/        marked (마크다운 → HTML, MIT)
+projects/<slug>/      프로젝트 상세 (index.html은 공통, content.md에 본문)
 ```
+
+## 프로젝트 상세 페이지
+
+프로젝트 카드를 누르면 `/projects/<slug>/`로 이동합니다.
+
+1. `data.js`의 `projects`에 항목을 추가하고 `slug`를 정해요 (예: `slug: 'lg-aimers'`).
+2. `projects/_template` 폴더를 복사해서 폴더 이름을 slug로 바꿔요 (예: `projects/lg-aimers/`).
+3. 그 폴더의 `content.md`에 상세 설명과 진행 과정을 마크다운으로 써요. 이미지는 같은 폴더에 넣고 `![설명](사진.png)`로 넣으면 됩니다.
+
+GitHub 같은 링크는 `data.js`의 `links`에 넣으면 상세 페이지에 버튼으로 나와요. `_template` 폴더는 배포되지 않아요.
 
 새 Lab 실험은 `lab/<이름>/index.html`을 만들고 `data.js`의 `lab`에 한 줄 추가하면 됩니다.
 

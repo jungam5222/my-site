@@ -71,10 +71,16 @@ window.SITE = {
    * 프로젝트 / 대회
    * type: 'hackathon' | 'datathon' | 'project'
    * featured: true 면 메인 화면에도 노출
+   * slug: 상세 페이지 주소 (/projects/<slug>/). 영어 소문자와 - 만 쓰세요.
+   *   상세 설명은 projects/<slug>/content.md 에 마크다운으로 씁니다.
+   *   새 프로젝트를 추가할 땐 projects/_template 폴더를 복사해서 이름을 slug로 바꾸면 돼요.
+   * links: 상세 페이지 왼쪽에 버튼으로 나와요. 첫 번째 링크가 강조됩니다.
+   * period, team: (선택) 상세 페이지 정보 칸에 표시. 예: period: '2026.08.01 – 08.02', team: '4인'
    */
   projects: [
     {
       title: 'AIKU 주니어톤',
+      slug: 'aiku-juniorthon',
       type: 'datathon',
       event: '정보대학 인공지능 학회 AIKU',
       date: '2026.08',
@@ -88,6 +94,7 @@ window.SITE = {
     },
     {
       title: '데이터톤 프로젝트 이름',
+      slug: 'example',
       type: 'datathon',
       event: '대회명 · 주최',
       date: '2025.05',
@@ -102,6 +109,7 @@ window.SITE = {
     },
     {
       title: 'yunmin.dev',
+      slug: 'yunmin-dev',
       type: 'project',
       event: '개인 프로젝트',
       date: '2026.10',

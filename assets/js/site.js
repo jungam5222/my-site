@@ -7,6 +7,7 @@
   const H = window.Holds;
   const P = S.profile;
   const page = document.body.dataset.page || 'home';
+  const navKey = document.body.dataset.nav || page;
 
   const $ = (sel, root = document) => root.querySelector(sel);
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -38,7 +39,7 @@
           <span>yunmin<b>.dev</b></span>
         </a>
         <nav class="nav" aria-label="주요 메뉴">
-          ${NAV.map((n) => `<a href="${n.url}"${n.ext ? linkAttrs(n.url) : ''}${n.key === page ? ' aria-current="page"' : ''}>${n.label}${n.ext ? '<span class="ext">↗</span>' : ''}</a>`).join('')}
+          ${NAV.map((n) => `<a href="${n.url}"${n.ext ? linkAttrs(n.url) : ''}${n.key === navKey ? ' aria-current="page"' : ''}>${n.label}${n.ext ? '<span class="ext">↗</span>' : ''}</a>`).join('')}
         </nav>
       </div>`;
     document.body.prepend(el);
@@ -128,39 +129,42 @@
       </div>`).join('')}</div>`;
   }
 
+  // 프로젝트 상세 페이지 주소: /projects/<slug>/
+  const projectUrl = (p) => (p.slug ? `/projects/${p.slug}/` : '/projects/');
+  const projectSeed = (p) => 300 + S.projects.indexOf(p);
+
   function projectRow(p, i) {
-    const url = (p.links && p.links[0] && p.links[0].url) || '/projects/';
     return `
-      <a class="row-card" href="${url}"${linkAttrs(url)} style="--c:${hex(p.color)}">
+      <a class="row-card" href="${projectUrl(p)}" style="--c:${hex(p.color)}">
         <span class="row-num">${pad(i + 1)}</span>
-        <span class="row-hold">${H.svg({ seed: 300 + i, color: p.color, size: 40 })}</span>
+        <span class="row-hold">${H.svg({ seed: projectSeed(p), color: p.color, size: 40 })}</span>
         <span class="row-main">
           <span class="row-title">${esc(p.title)}${ph(p)}</span>
           <span class="row-sub">${esc(p.event)} · ${esc(p.result)}</span>
         </span>
         <span class="tag" style="--c:${hex(TYPE_COLOR[p.type])}">${TYPE_LABEL[p.type] || p.type}</span>
         <span class="row-date">${esc(p.date)}</span>
-        <span class="row-arrow">↗</span>
+        <span class="row-arrow">→</span>
       </a>`;
   }
 
   function projectCard(p, i) {
     return `
-      <article class="p-card" data-type="${p.type}" style="--c:${hex(p.color)}">
+      <a class="p-card" href="${projectUrl(p)}" data-type="${p.type}" style="--c:${hex(p.color)}">
         <div class="p-top">
           <span class="row-num">${pad(i + 1)}</span>
           <span class="tag" style="--c:${hex(TYPE_COLOR[p.type])}">${TYPE_LABEL[p.type] || p.type}</span>
           <span class="row-date">${esc(p.date)}</span>
         </div>
-        <div class="p-hold">${H.svg({ seed: 300 + i, color: p.color, size: 72 })}</div>
+        <div class="p-hold">${H.svg({ seed: projectSeed(p), color: p.color, size: 72 })}</div>
         <h3>${esc(p.title)}${ph(p)}</h3>
         <p class="p-event">${esc(p.event)}</p>
         <p class="p-result">🏆 ${esc(p.result)}</p>
         <p>${esc(p.summary)}</p>
         <p class="p-role"><b>역할</b> ${esc(p.role)}</p>
         <div class="chips">${(p.tags || []).map((t) => `<span class="chip">${esc(t)}</span>`).join('')}</div>
-        ${p.links && p.links.length ? `<div class="p-links">${p.links.map((l) => `<a href="${l.url}"${linkAttrs(l.url)}>${esc(l.label)} ↗</a>`).join('')}</div>` : ''}
-      </article>`;
+        <span class="p-more">자세히 보기 →</span>
+      </a>`;
   }
 
   function labRow(l, i) {
@@ -336,7 +340,7 @@
   /* ---------- 페이지별 ---------- */
   const pages = {
     home() {
-      fill('hero-name', `${esc(P.nameKo)}<span class="dot">.</span>`);
+      fill('hero-name', `${esc(P.nameEn)}<span class="dot">.</span>`);
       fill('hero-meta', `<span>${esc(P.location)}</span><span>${esc(P.role)}</span>`);
       fill('hero-tagline', esc(P.tagline));
       fill('hero-intro', esc(P.intro));
@@ -392,6 +396,77 @@
       });
     },
 
+    project() {
+      const root = $('#project');
+      const slug = location.pathname.split('/').filter(Boolean)[1];
+      const p = S.projects.find((x) => x.slug === slug);
+      if (!p) {
+        root.innerHTML = `<div class="wrap page-hero"><p class="eyebrow">/projects/${esc(slug)}</p><h1>프로젝트를 찾을 수 없어요</h1>
+          <p class="lead">data.js의 projects에 slug: '${esc(slug)}' 항목이 있는지 확인해 주세요.</p>
+          <div class="hero-cta"><a class="btn" href="/projects/">← 모든 프로젝트</a></div></div>`;
+        return;
+      }
+      document.title = `${p.title} · yunmin.dev`;
+      const sorted = S.projects.slice().sort((a, b) => String(b.date).localeCompare(String(a.date)));
+      const k = sorted.indexOf(p);
+      const prev = sorted[k - 1], next = sorted[k + 1];
+      const meta = [['대회', p.event], ['기간', p.period || p.date], ['결과', p.result], ['역할', p.role], ['팀', p.team]]
+        .filter(([, v]) => v);
+      const links = (p.links || []).filter((l) => l.url);
+
+      root.innerHTML = `
+        <header class="page-hero proj-hero" style="--c:${hex(p.color)}">
+          <div class="wrap">
+            <p class="eyebrow"><a href="/projects/">/projects</a> / ${esc(p.slug)}</p>
+            <div class="proj-title">
+              <div>
+                <div class="p-top">
+                  <span class="tag" style="--c:${hex(TYPE_COLOR[p.type])}">${TYPE_LABEL[p.type] || p.type}</span>
+                  <span class="row-date">${esc(p.date)}</span>
+                </div>
+                <h1>${esc(p.title)}${ph(p)}</h1>
+                <p class="lead">${esc(p.summary)}</p>
+              </div>
+              <div class="proj-hold">${H.svg({ seed: projectSeed(p), color: p.color, size: 132 })}</div>
+            </div>
+          </div>
+        </header>
+        <section class="proj-body-sec">
+          <div class="wrap proj-layout">
+            <aside class="proj-side">
+              <div class="panel">
+                <p class="panel-title">프로젝트 정보</p>
+                <dl class="cv">${meta.map(([k2, v]) => `<div><dt>${k2}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
+                ${(p.tags || []).length ? `<div class="chips proj-tags">${p.tags.map((t) => `<span class="chip">${esc(t)}</span>`).join('')}</div>` : ''}
+                ${links.length ? `<div class="proj-links">${links.map((l, j) =>
+                  `<a class="btn${j === 0 ? ' primary' : ''}" href="${l.url}"${linkAttrs(l.url)}>${esc(l.label)} ↗</a>`).join('')}</div>` : ''}
+              </div>
+            </aside>
+            <article class="prose" id="project-body"><p class="muted">불러오는 중…</p></article>
+          </div>
+        </section>
+        <nav class="wrap proj-nav" aria-label="다른 프로젝트">
+          ${prev ? `<a class="row-card" href="${projectUrl(prev)}" style="--c:${hex(prev.color)}"><span class="row-main"><span class="row-sub">← 최근 프로젝트</span><span class="row-title">${esc(prev.title)}</span></span></a>` : '<span></span>'}
+          ${next ? `<a class="row-card next" href="${projectUrl(next)}" style="--c:${hex(next.color)}"><span class="row-main"><span class="row-sub">이전 프로젝트 →</span><span class="row-title">${esc(next.title)}</span></span></a>` : '<span></span>'}
+        </nav>`;
+
+      const body = $('#project-body');
+      fetch(`/projects/${p.slug}/content.md`, { cache: 'no-cache' })
+        .then((r) => (r.ok ? r.text() : Promise.reject(r.status)))
+        .then((md) => {
+          body.innerHTML = window.marked ? window.marked.parse(md) : `<pre>${esc(md)}</pre>`;
+          // 소제목마다 작은 홀드
+          const colors = H.COLOR_KEYS;
+          body.querySelectorAll('h2').forEach((h, j) => {
+            h.insertAdjacentHTML('afterbegin', H.svg({ seed: 1000 + j, color: colors[(colors.indexOf(p.color) + j) % colors.length], size: 26 }));
+          });
+          body.querySelectorAll('a[href^="http"]').forEach((a) => { a.target = '_blank'; a.rel = 'noopener'; });
+        })
+        .catch(() => {
+          body.innerHTML = '<p class="muted">상세 설명을 아직 작성하는 중이에요. 🧗</p>';
+        });
+    },
+
     lab() {
       fill('lab-list', S.lab.map(labRow).join(''));
     },
@@ -407,10 +482,16 @@
 
       const max = Math.max(1, ...C.grades.map((g) => g.count));
       const gradeColors = ['yellow', 'orange', 'green', 'blue', 'red', 'purple', 'pink', 'teal', 'lime'];
+      // 'allez pink'처럼 이름에 색이 들어 있으면 그 색으로 그립니다
+      const EXTRA = { black: '#2B2622', white: '#CFC6B4', gray: '#9A9384', grey: '#9A9384', brown: '#8A5A3B' };
+      const barColor = (g, i) => {
+        const c = g.color || String(g.grade).toLowerCase().split(/\s+/).reverse().find((w) => H.PALETTE[w] || EXTRA[w]);
+        return EXTRA[c] || hex(c || gradeColors[i % gradeColors.length]);
+      };
       fill('grade-chart', C.grades.map((g, i) => `
         <div class="bar-row">
           <span class="bar-k">${esc(g.grade)}</span>
-          <span class="bar"><span style="width:${(g.count / max) * 100}%;--c:${hex(gradeColors[i % gradeColors.length])}"></span></span>
+          <span class="bar"><span style="width:${(g.count / max) * 100}%;--c:${barColor(g, i)}"></span></span>
           <span class="bar-v">${g.count}</span>
         </div>`).join(''));
 
