@@ -202,6 +202,28 @@ window.SITE = {
       status: 'live',
     },
     {
+      title: 'yunmin.dev',
+      desc: '지금 보고 계신 이 사이트. 클라이밍 벽을 모티프로 HTML, CSS, JS만으로 만들고 Cloudflare Workers에 올렸어요.',
+      date: '2026.10',
+      slug: 'yunmin-dev',
+      // Projects의 yunmin.dev와 같은 글을 씁니다
+      content: '/projects/yunmin-dev/content.md',
+      tags: ['HTML', 'CSS', 'JS', 'Cloudflare'],
+      links: [{ label: 'GitHub', url: 'https://github.com/jungam5222/my-site' }],
+      color: 'green',
+      status: 'live',
+    },
+    {
+      title: 'portfolio.yunmin.dev',
+      desc: '경력과 프로젝트, 대회를 간결하게 정리할 CV 사이트. yunmin.dev의 디자인을 따르되 더 컴팩트하게 만들 예정이에요.',
+      date: '—',
+      slug: 'portfolio',
+      tags: ['CV'],
+      links: [],
+      color: 'blue',
+      status: 'soon',
+    },
+    {
       title: 'Hold Generator',
       desc: '버튼 한 번에 새로운 클라이밍 홀드를 만들어요. 이 사이트의 홀드도 전부 여기서 나왔습니다.',
       date: '2026.10',

@@ -354,7 +354,7 @@
     document.title = `${p.title} · yunmin.dev`;
     const k = cfg.list.indexOf(p);
     const prev = cfg.list[k - 1], next = cfg.list[k + 1];
-    const meta = cfg.meta(p).filter(([, v]) => v);
+    const meta = cfg.meta(p).filter(([, v]) => v && v !== '—');
     const links = (p.links || []).filter((l) => l.url);
     const navCard = (x, label, cls) => `<a class="row-card${cls}" href="${cfg.url(x)}"${linkAttrs(cfg.url(x))} style="--c:${hex(x.color)}"><span class="row-main"><span class="row-sub">${label}</span><span class="row-title">${esc(x.title)}</span></span></a>`;
 
@@ -392,7 +392,8 @@
       </nav>`;
 
     const body = $('#project-body');
-    fetch(`/${cfg.base}/${p.slug}/content.md`, { cache: 'no-cache' })
+    // content: 다른 폴더의 content.md를 같이 쓰고 싶을 때 (예: '/projects/yunmin-dev/content.md')
+    fetch(p.content || `/${cfg.base}/${p.slug}/content.md`, { cache: 'no-cache' })
       .then((r) => (r.ok ? r.text() : Promise.reject(r.status)))
       .then((md) => {
         body.innerHTML = window.marked ? window.marked.parse(md) : `<pre>${esc(md)}</pre>`;
