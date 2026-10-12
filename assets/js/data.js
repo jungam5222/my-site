@@ -23,10 +23,9 @@ window.SITE = {
      */
     contacts: [
       { label: 'Email',          url: 'mailto:hym1029384756@gmail.com' },  // 'mailto:you@example.com'
-      { label: 'Email',          url: 'mailto:jungam5222@naver.com' },
       { label: 'GitHub',         url: 'https://github.com/jungam5222' },
       { label: 'LinkedIn',       url: 'https://www.linkedin.com/in/윤민-홍-829857381' },  // 'https://www.linkedin.com/in/아이디'
-      { label: 'Blog',           url: 'https://m.blog.naver.com/jungam5222' },  // velog, tistory, medium 등
+      { label: 'Blog',           url: '' },  // velog, tistory, medium 등
       { label: 'Kaggle',         url: '' },  // 'https://www.kaggle.com/아이디'
       { label: 'DACON',          url: '' },  // 'https://dacon.io/myprofile/번호'
       { label: 'Hugging Face',   url: '' },  // 'https://huggingface.co/아이디'
@@ -58,6 +57,7 @@ window.SITE = {
     { date: '2025.03', title: '고려대학교 컴퓨터학과 입학', desc: '' },
     { date: '2025.10', title: '첫 해커톤 참가', desc: 'NASA Space Apps Challenge' },
     { date: '2025.11', title: '첫 데이터톤 참가', desc: '정보대학 Inthon 데이터톤 트랙' },
+    { date: '2025.11 - 26.11', title: '고려대학교 컴퓨터학과 부학생회장', desc: '제2대 학생회 \'영원\'' },
     { date: '2026.06 - .09', title: 'LG Aimers 9기', desc: '투구 제구 성공률 예측하기 / 리더보드 상위 4퍼센트' },
     { date: '2026.08', title: 'AIKU 주니어톤', desc: '손필기 분류하기 / 1위' },
     { date: '2026.10', title: '데이터톤 참가', desc: '정보대학 Inthon 데이터톤 트랙' },
@@ -257,7 +257,7 @@ window.SITE = {
     style: '볼더링',
     // 그레이드별 완등 수 (그래프용). 숫자만 바꾸면 됩니다.
     grades: [
-      { grade: 'the climb purple', count: 2 }, { grade: 'peakers black', count: 2 }, { grade: 'sonsangwon pink', count: 2 },
+      { grade: 'the climb purple', count: 2 }, { grade: 'peakers black', count: 2 }, { grade: 'sonsangwon pink', count: 5 },
       { grade: 'damjang black', count: 3 }, { grade: 'seoul forest black', count: 0 }, { grade: 'allez pink', count: 13 },
       { grade: 'allez black', count: 1 },
     ],
