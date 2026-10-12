@@ -225,10 +225,10 @@ window.SITE = {
       status: 'live',
     },
     {
-      title: 'portfolio.yunmin.dev',
+      title: 'me.yunmin.dev',
       desc: '경력과 프로젝트, 대회를 간결하게 정리할 CV 사이트. yunmin.dev의 디자인을 따르되 더 컴팩트하게 만들 예정이에요.',
       date: '—',
-      slug: 'portfolio',
+      slug: 'me',
       tags: ['CV'],
       links: [],
       status: 'soon',
@@ -273,6 +273,6 @@ window.SITE = {
   // 다른 서브도메인
   elsewhere: [
     { title: 'game.yunmin.dev', desc: '하늘의 별따기를 시작으로 Quordle, chain.le 한국어판 같은 웹 게임들.', url: 'https://game.yunmin.dev', color: 'yellow', status: '운영 중' },
-    { title: 'portfolio.yunmin.dev', desc: '경력과 프로젝트를 간결하게 정리한 CV.', url: 'https://portfolio.yunmin.dev', color: 'blue', status: '준비 중' },
+    { title: 'me.yunmin.dev', desc: '경력과 프로젝트를 간결하게 정리한 CV.', url: 'https://me.yunmin.dev', color: 'blue', status: '준비 중' },
   ],
 };
