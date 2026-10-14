@@ -310,9 +310,9 @@ a.row-card:hover .row-arrow { color: var(--c); }
 /* ---------- about page ---------- */
 .timeline { list-style: none; margin: 0; padding: 0; position: relative; }
 .timeline::before { content: ''; position: absolute; left: 15px; top: 10px; bottom: 10px; border-left: 2px dashed var(--line-2); }
-.timeline li { position: relative; display: grid; grid-template-columns: 30px 110px 1fr; gap: 16px; align-items: start; padding: 10px 0; }
+.timeline li { position: relative; display: grid; grid-template-columns: 30px 150px 1fr; gap: 16px; align-items: start; padding: 10px 0; }
 .tl-hold { position: relative; z-index: 1; }
-.tl-date { font-family: var(--mono); font-size: 13px; color: var(--muted); padding-top: 4px; }
+.tl-date { font-family: var(--mono); font-size: 13px; color: var(--muted); padding-top: 4px; white-space: nowrap; }
 .tl-title { font-weight: 700; }
 
 /* ---------- climbing page ---------- */
