@@ -239,7 +239,7 @@
         const size = isTop ? 76 : 54 + ((seed * 7) % 24);
         holds.push(`
           <button class="wall-hold${isTop ? ' is-top' : ''}" type="button" data-route="${ri}" data-idx="${hi}"
-            style="left:${x}%;top:${y}%;--w:${(size / 5).toFixed(1)}%;--c:${hex(r.color)};--i:${ri}"
+            style="left:${x}%;top:${y}%;--w:${(size / 5).toFixed(1)}%;--c:${hex(r.color)}"
             aria-label="${isTop ? `${esc(r.title)}(으)로 가기` : `${esc(r.title)} 루트 ${hi + 1}번 홀드`}">
             ${H.svg({ seed: seed++ * 13, color: r.color, size })}
             ${isStart ? `<span class="start-tape" style="--c:${hex(r.color)}">${esc(r.grade)}</span>` : ''}
