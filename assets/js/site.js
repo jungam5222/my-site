@@ -207,74 +207,102 @@
   }
 
   /* ---------- 메인: 클라이밍 벽 ---------- */
-  // 루트 = 같은 색 홀드 묶음. x, y는 벽 안에서의 % 위치 (y는 아래가 100)
-  const ROUTES = [
-    { color: 'red',    grade: 'V2', holds: [[14, 88], [22, 68], [16, 48], [28, 30], [24, 10]] },
-    { color: 'blue',   grade: 'V4', holds: [[46, 85], [38, 70], [52, 55], [44, 36], [56, 14]] },
-    { color: 'yellow', grade: 'V1', holds: [[72, 88], [64, 68], [76, 52], [66, 32], [74, 10]] },
-    { color: 'purple', grade: 'V5', holds: [[92, 80], [89, 56], [92, 34]] },
-    { color: 'green',  grade: 'V0', holds: [[32, 84], [34, 56], [8, 24]] },
+  // 루트 하나 = 하위 페이지 하나 (data.js의 home.routes). 꼭대기(TOP)를 누르면 그 페이지로 갑니다.
+  // 홀드 자리: x, y는 벽 안에서의 % 위치 (y는 아래가 100). routes 순서대로 하나씩 씁니다.
+  const WALL_LINES = [
+    [[46, 85], [38, 70], [52, 55], [44, 36], [56, 12]],
+    [[14, 88], [22, 68], [16, 48], [28, 30], [22, 12]],
+    [[72, 88], [64, 68], [76, 52], [66, 32], [76, 12]],
+    [[92, 82], [88, 58], [90, 36]],
+    [[32, 86], [34, 60], [10, 38]],
   ];
+  const fillTokens = (s) => String(s ?? '')
+    .replace(/\{projects\}/g, S.projects.length)
+    .replace(/\{lab\}/g, S.lab.filter((l) => l.slug || l.url).length)
+    .replace(/\{best\}/g, (S.climbing && S.climbing.best) || '');
+  const homeRoutes = () => ((S.home && S.home.routes) || []).slice(0, WALL_LINES.length).map((r) => ({
+    ...r, grade: fillTokens(r.grade), teaser: fillTokens(r.teaser), holds: WALL_LINES[S.home.routes.indexOf(r)],
+  }));
 
-  function renderWall(root) {
+  function go(url) {
+    if (isExternal(url)) window.open(url, '_blank', 'noopener');
+    else location.href = url;
+  }
+
+  function renderWall(root, routes) {
     if (!root) return;
     let seed = 1;
     const holds = [];
-    ROUTES.forEach((r, ri) => {
+    routes.forEach((r, ri) => {
       r.holds.forEach(([x, y], hi) => {
         const isStart = hi === 0, isTop = hi === r.holds.length - 1;
-        const size = isTop ? 72 : 54 + ((seed * 7) % 24);
+        const size = isTop ? 76 : 54 + ((seed * 7) % 24);
         holds.push(`
-          <button class="wall-hold" type="button" data-route="${ri}" data-idx="${hi}"
-            style="left:${x}%;top:${y}%;--w:${(size / 5).toFixed(1)}%" aria-label="${H.PALETTE[r.color].ko} 루트 ${hi + 1}번 홀드">
+          <button class="wall-hold${isTop ? ' is-top' : ''}" type="button" data-route="${ri}" data-idx="${hi}"
+            style="left:${x}%;top:${y}%;--w:${(size / 5).toFixed(1)}%;--c:${hex(r.color)};--i:${ri}"
+            aria-label="${isTop ? `${esc(r.title)}(으)로 가기` : `${esc(r.title)} 루트 ${hi + 1}번 홀드`}">
             ${H.svg({ seed: seed++ * 13, color: r.color, size })}
-            ${isStart ? `<span class="start-tape" style="--c:${hex(r.color)}">${r.grade}</span>` : ''}
-            ${isTop ? '<span class="top-tape">TOP</span>' : ''}
+            ${isStart ? `<span class="start-tape" style="--c:${hex(r.color)}">${esc(r.grade)}</span>` : ''}
+            ${isTop ? `<span class="top-tape">${esc(r.title)} ↑</span>` : ''}
           </button>`);
       });
     });
     root.innerHTML = `
       <div class="wall-inner">${holds.join('')}</div>
-      <div class="wall-hint" aria-live="polite">홀드를 눌러 루트를 완등해 보세요</div>`;
+      <div class="wall-hint" aria-live="polite">홀드를 눌러 루트를 골라 보세요</div>`;
 
     const hint = $('.wall-hint', root);
-    const touched = ROUTES.map(() => new Set());
+    const touched = routes.map(() => new Set());
     const defaultHint = hint.textContent;
+    const cards = [...document.querySelectorAll('.route-card')];
+    const focus = (ri) => {
+      if (ri == null) { delete root.dataset.focus; cards.forEach((c) => c.classList.remove('lit')); hint.textContent = defaultHint; return; }
+      root.dataset.focus = ri;
+      cards.forEach((c, k) => c.classList.toggle('lit', k === +ri));
+      const r = routes[ri];
+      hint.textContent = touched[ri].size
+        ? `${r.title} · ${touched[ri].size}/${r.holds.length} · TOP을 누르면 출발`
+        : `${r.title} 루트 · ${r.grade} · TOP을 누르면 출발`;
+    };
+    root._focus = focus;
 
     root.addEventListener('mouseover', (e) => {
       const b = e.target.closest('.wall-hold');
-      if (!b) return;
-      root.dataset.focus = b.dataset.route;
-      const r = ROUTES[b.dataset.route];
-      hint.textContent = `${H.PALETTE[r.color].ko} 루트 · ${r.grade} · ${touched[b.dataset.route].size}/${r.holds.length}`;
+      if (b) focus(b.dataset.route);
     });
-    root.addEventListener('mouseleave', () => { delete root.dataset.focus; hint.textContent = defaultHint; });
+    root.addEventListener('mouseleave', () => focus(null));
 
     root.addEventListener('click', (e) => {
       const b = e.target.closest('.wall-hold');
       if (!b) return;
       const ri = +b.dataset.route;
-      const r = ROUTES[ri];
-      root.dataset.focus = ri;
+      const r = routes[ri];
       b.classList.remove('grab'); void b.offsetWidth; b.classList.add('grab');
       b.classList.add('touched');
       touched[ri].add(+b.dataset.idx);
-      if (touched[ri].size === r.holds.length) {
-        hint.textContent = `${H.PALETTE[r.color].ko} ${r.grade} 완등! 🎉`;
+      if (b.classList.contains('is-top')) {
+        const sent = touched[ri].size === r.holds.length;
+        hint.textContent = sent ? `${r.title} 완등! 🎉` : `${r.title}(으)로 올라가는 중…`;
         hint.classList.add('sent');
-        root.querySelectorAll(`.wall-hold[data-route="${ri}"]`).forEach((h, k) => {
-          setTimeout(() => { h.classList.remove('grab'); void h.offsetWidth; h.classList.add('grab'); }, k * 90);
-        });
-        burst(b);
-        setTimeout(() => {
-          hint.classList.remove('sent');
-          touched[ri].clear();
-          root.querySelectorAll(`.wall-hold[data-route="${ri}"]`).forEach((h) => h.classList.remove('touched'));
-        }, 2600);
-      } else {
-        hint.textContent = `${H.PALETTE[r.color].ko} 루트 · ${r.grade} · ${touched[ri].size}/${r.holds.length}`;
+        if (sent) burst(b);
+        setTimeout(() => { hint.classList.remove('sent'); go(r.url); }, sent ? 750 : 380);
+        return;
       }
+      focus(ri);
     });
+  }
+
+  function routeCards(routes) {
+    return routes.map((r, i) => `
+      <a class="route-card reveal" href="${r.url}"${linkAttrs(r.url)} data-route="${i}" style="--c:${hex(r.color)}">
+        <span class="route-top">
+          <span class="start-tape" style="--c:${hex(r.color)}">${esc(r.grade)}</span>
+          <span class="route-hold">${H.svg({ seed: 1200 + i, color: r.color, size: 46 })}</span>
+        </span>
+        <span class="route-title">${esc(r.title)}${isExternal(r.url) ? ' <span class="ext">↗</span>' : ''}</span>
+        <span class="route-teaser">${esc(r.teaser)}</span>
+        <span class="route-go">${isExternal(r.url) ? esc(r.url.replace(/^https?:\/\//, '')) : esc(r.url)} →</span>
+      </a>`).join('');
   }
 
   // 완등 시 초크 가루
@@ -422,22 +450,17 @@
     home() {
       fill('hero-name', `${esc(P.nameEn)}<span class="dot">.</span>`);
       fill('hero-meta', `<span>${esc(P.location)}</span><span>${esc(P.role)}</span>`);
-      fill('hero-tagline', esc(P.tagline));
-      fill('hero-intro', esc(P.intro));
-      renderWall($('#wall'));
-      fill('about-head', secHead('01', 'About', 'CV 요약 + 쓸데없는 이야기', 'red', '/about/'));
-      fill('about-cv', cvList());
-      fill('about-facts', factCards());
-      fill('now-head', secHead('02', 'Now', '요즘 하고 있는 것', 'orange'));
-      fill('now-list', nowList());
-      fill('stack-list', stackList());
-      fill('projects-head', secHead('03', 'Projects', '해커톤 · 데이터톤 · 사이드 프로젝트', 'blue', '/projects/'));
-      fill('projects-list', projectsSorted.filter((p) => p.featured).map(projectRow).join(''));
-      fill('lab-head', secHead('04', 'Lab', '웹 개발 놀이터', 'pink', '/lab/'));
-      fill('lab-list', S.lab.map(labRow).join(''));
-      fill('else-head', secHead('05', 'Elsewhere', 'yunmin.dev의 다른 방들', 'yellow'));
-      fill('else-list', elsewhereCards());
-      fill('contact-links', contactLinks().map((l) => `<a class="btn" href="${l.url}"${linkAttrs(l.url)}>${esc(l.label)} ↗</a>`).join(''));
+      fill('hero-hook', ((S.home && S.home.hook) || [P.tagline]).map((l) =>
+        esc(l).replace(/\*\*(.+?)\*\*/g, '<mark>$1</mark>')).join('<br>'));
+      const routes = homeRoutes();
+      fill('route-cards', routeCards(routes));
+      const wall = $('#wall');
+      renderWall(wall, routes);
+      // 아래 카드에 올리면 벽에서도 그 루트가 보여요
+      document.querySelectorAll('.route-card').forEach((c) => {
+        c.addEventListener('mouseenter', () => wall._focus(c.dataset.route));
+        c.addEventListener('mouseleave', () => wall._focus(null));
+      });
     },
 
     about() {
@@ -445,16 +468,18 @@
       fill('about-intro', esc(P.intro));
       fill('cv-head', secHead('01', '요약', '', 'red'));
       fill('about-cv', cvList());
-      fill('tl-head', secHead('02', '지나온 길', '', 'blue'));
+      fill('now-head', secHead('02', 'Now', '요즘 하고 있는 것', 'orange'));
+      fill('now-list', nowList());
+      fill('tl-head', secHead('03', '지나온 길', '', 'blue'));
       fill('timeline', S.timeline.map((t, i) => `
         <li style="--c:${hex(seq(i))}">
           <span class="tl-hold">${H.svg({ seed: 700 + i, color: seq(i), size: 30 })}</span>
           <span class="tl-date">${esc(t.date)}</span>
           <div><p class="tl-title">${esc(t.title)}${ph(t)}</p><p class="muted">${esc(t.desc)}</p></div>
         </li>`).join(''));
-      fill('stack-head', secHead('03', 'Toolbox', '자주 쓰는 도구', 'teal'));
+      fill('stack-head', secHead('04', 'Toolbox', '자주 쓰는 도구', 'teal'));
       fill('stack-list', stackList());
-      fill('facts-head', secHead('04', '쓸데없는 About Me', '', 'purple'));
+      fill('facts-head', secHead('05', '쓸데없는 About Me', '', 'purple'));
       fill('about-facts', factCards());
       fill('contact-links', contactLinks().map((l) => `<a class="btn" href="${l.url}"${linkAttrs(l.url)}>${esc(l.label)} ↗</a>`).join(''));
     },

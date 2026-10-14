@@ -41,6 +41,24 @@ window.SITE = {
     ],
   },
 
+  /*
+   * 메인 화면: 이름 아래 한두 줄과, 벽의 루트 5개.
+   * 루트 하나 = 하위 페이지 하나. 벽에서 꼭대기(TOP) 홀드를 누르면 그 페이지로 가요.
+   * hook의 **글자**는 형광펜으로 강조돼요.
+   * teaser에 {projects} {lab} {best} 를 쓰면 프로젝트 개수, Lab 개수, 클라이밍 최고 그레이드로 바뀌어요.
+   * grade는 벽의 시작 테이프에 적히는 글자예요 (재미용).
+   */
+  home: {
+    hook: ['데이터톤 **1위**, 볼더링 **V7**.', '둘 중 뭐가 더 어려웠을까요?'],
+    routes: [
+      { title: 'Projects', url: '/projects/', color: 'red',    grade: 'V4', teaser: '프로젝트 {projects}개. 1위 한 번, 상위 4% 한 번. 나머지 이야기는 들어가서 확인해 보세요.' },
+      { title: 'About',    url: '/about/',    color: 'yellow', grade: 'V1', teaser: '과학고에서 컴퓨터학과 부학생회장까지. MBTI는 들어가 보면 알아요.' },
+      { title: 'Lab',      url: '/lab/',      color: 'blue',   grade: 'V3', teaser: '게임, 홀드 생성기, 지금 보고 있는 이 사이트까지. 그냥 만들어 보고 싶었던 것들.' },
+      { title: 'Climbing', url: '/climbing/', color: 'purple', grade: '{best}', teaser: '최고 그레이드 {best}. 주말마다 어느 벽에 붙어 있는지 궁금하다면.' },
+      { title: 'Game',     url: 'https://game.yunmin.dev', color: 'green', grade: 'V0', teaser: '남들이 못 떠올린 단어일수록 점수가 높아요. 한 판 해볼래요?' },
+    ],
+  },
+
   // CV 요약 (about 섹션 왼쪽)
   cv: [
     { label: '학력', value: '고려대학교 컴퓨터학과 · 수학과 이중전공 · 2학년' },

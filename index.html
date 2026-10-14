@@ -21,80 +21,30 @@
 <body data-page="home">
   <a class="skip" href="#main">본문으로 건너뛰기</a>
   <main id="main">
-    <section class="hero" id="hello" data-color="pink" data-title="Hello">
+    <section class="hero home-hero" id="hello">
       <div class="wrap hero-grid">
         <div>
           <div class="hero-meta" id="hero-meta"></div>
           <p class="hero-hello">안녕하세요, 👋</p>
           <h1 id="hero-name">Yunmin Hong</h1>
-          <p class="hero-tagline" id="hero-tagline"></p>
-          <p class="hero-intro" id="hero-intro"></p>
-          <div class="hero-cta">
-            <a class="btn primary" href="/projects/">프로젝트 보기</a>
-            <a class="btn" href="/about/">더 알아보기</a>
-          </div>
+          <p class="hero-hook" id="hero-hook"></p>
+          <p class="hero-how">
+            <span class="how-wide">오른쪽 벽에서</span><span class="how-narrow">아래 벽에서</span>
+            루트를 골라 <b>TOP</b>을 눌러 보세요. 꼭대기마다 다른 방이 있어요.
+          </p>
+          <a class="hero-skip" href="#routes">그냥 목록으로 볼래요 ↓</a>
         </div>
-        <div class="wall" id="wall" role="group" aria-label="클라이밍 벽 미니게임"></div>
+        <div class="wall" id="wall" role="group" aria-label="루트를 골라 하위 페이지로 가는 클라이밍 벽"></div>
       </div>
     </section>
 
-    <section id="about" data-color="red" data-title="About">
+    <section class="routes-sec" id="routes">
       <div class="wrap">
-        <div id="about-head"></div>
-        <div class="about-grid reveal">
-          <div class="panel">
-            <p class="panel-title">CV 요약</p>
-            <div id="about-cv"></div>
-          </div>
-          <div id="about-facts"></div>
+        <div class="sec-head">
+          <span class="tape" style="--c:#2B2622">START</span>
+          <h2>어디부터 올라갈까요?</h2>
         </div>
-      </div>
-    </section>
-
-    <section id="now" data-color="orange" data-title="Now">
-      <div class="wrap">
-        <div id="now-head"></div>
-        <div class="now-grid reveal">
-          <div class="panel">
-            <p class="panel-title">Now</p>
-            <div id="now-list"></div>
-          </div>
-          <div class="panel">
-            <p class="panel-title">Toolbox</p>
-            <div id="stack-list"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="projects" data-color="yellow" data-title="Projects">
-      <div class="wrap">
-        <div id="projects-head"></div>
-        <div class="rows reveal" id="projects-list"></div>
-      </div>
-    </section>
-
-    <section id="lab" data-color="lime" data-title="Lab">
-      <div class="wrap">
-        <div id="lab-head"></div>
-        <div class="rows reveal" id="lab-list"></div>
-      </div>
-    </section>
-
-    <section id="elsewhere" data-color="green" data-title="Elsewhere">
-      <div class="wrap">
-        <div id="else-head"></div>
-        <div class="reveal" id="else-list"></div>
-      </div>
-    </section>
-
-    <section id="contact" data-color="teal" data-title="Contact">
-      <div class="wrap">
-        <div class="contact reveal">
-          <h2>같이 뭔가 만들어 볼까요?</h2>
-          <p>해커톤 팀원 구인, 커피챗, 클라이밍 메이트 모두 환영해요.</p>
-          <div class="hero-cta" id="contact-links"></div>
-        </div>
+        <div class="route-cards" id="route-cards"></div>
       </div>
     </section>
   </main>
