@@ -88,7 +88,7 @@ window.SITE = {
     { date: '2025.03 – 2026.01', title: '백구회', desc: '중앙동아리 야구부', en: { title: "Baekguhoe", desc: "Central baseball club" } },
     { date: '2025.10', title: '첫 해커톤 참가', desc: 'NASA Space Apps Challenge', en: { title: "First hackathon", desc: "NASA Space Apps Challenge" } },
     { date: '2025.11', title: '첫 데이터톤 참가', desc: '정보대학 Inthon 데이터톤 트랙', en: { title: "First datathon", desc: "Inthon datathon track, College of Informatics" } },
-    { date: '2025.11 – Now', title: '고려대학교 컴퓨터학과 부학생회장', desc: '제2대 학생회 \'영원\'', en: { title: "Vice president, Korea University CS student council", desc: "2nd student council 'Yeongwon'" } },
+    { date: '2025.11 – Now', title: '고려대학교 컴퓨터학과 부학생회장', desc: '제2대 학생회 \'영원\'', en: { title: "Vice president, Korea University CS student council", desc: "2nd student council 'Youngone'" } },
     { date: '2026.03 – Now', title: 'KUICS', desc: '정보대학 보안 동아리', en: { title: "KUICS", desc: "Security club, College of Informatics" } },
     { date: '2026.06 – 2026.09', title: 'LG Aimers 9기', desc: '투구 제구 성공률 예측 / 리더보드 상위 4%', en: { title: "LG Aimers, 9th cohort", desc: "Predicting pitch command success / Top 4% on the leaderboard" } },
     { date: '2026.07 – Now', title: 'AIKU', desc: '정보대학 인공지능 학회', en: { title: "AIKU", desc: "AI society, College of Informatics" } },
