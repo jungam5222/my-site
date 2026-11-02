@@ -63,16 +63,13 @@
           <nav class="nav" aria-label="${T('주요 메뉴', 'Main menu')}">
             ${NAV.map((n) => `<a href="${n.url}"${n.ext ? linkAttrs(n.url) : ''}${n.key === navKey ? ' aria-current="page"' : ''}>${n.label}${n.ext ? '<span class="ext">↗</span>' : ''}</a>`).join('')}
           </nav>
-          <div class="lang-toggle" role="group" aria-label="${T('언어', 'Language')}">
-            <button type="button" data-lang="ko" aria-pressed="${!EN}" lang="ko">KO</button><button type="button" data-lang="en" aria-pressed="${EN}" lang="en">EN</button>
-          </div>
+          <button type="button" class="lang-toggle" aria-label="${T('English로 보기', '한국어로 보기')}" title="${T('English', '한국어')}">
+            <span${EN ? '' : ' class="on"'}>KO</span><span class="sep">/</span><span${EN ? ' class="on"' : ''}>EN</span>
+          </button>
         </div>
       </div>`;
     document.body.prepend(el);
-    el.querySelector('.lang-toggle').addEventListener('click', (e) => {
-      const b = e.target.closest('button[data-lang]');
-      if (b && b.dataset.lang !== LANG) window.setLang(b.dataset.lang);
-    });
+    el.querySelector('.lang-toggle').addEventListener('click', () => window.setLang(EN ? 'ko' : 'en'));
     const onScroll = () => el.classList.toggle('scrolled', window.scrollY > 8);
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();

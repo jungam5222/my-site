@@ -536,20 +536,21 @@ a.row-card:hover .row-arrow { color: var(--c); }
 
 /* ---------- 언어 전환 ---------- */
 html.lang-en:not(.i18n-ready) body { visibility: hidden; }
-.lang-toggle { display: inline-flex; border: 1.5px solid var(--ink); border-radius: 999px; overflow: hidden; flex: none; }
-.lang-toggle button {
-  font: 600 12.5px/1 var(--mono); letter-spacing: .02em; padding: 6px 10px; border: 0; background: var(--card); color: var(--ink-2); cursor: pointer;
+.lang-toggle {
+  display: inline-flex; align-items: center; gap: 4px; flex: none; cursor: pointer;
+  font: 500 12px/1 var(--mono); color: var(--muted);
+  background: none; border: 1px solid transparent; border-radius: 999px; padding: 6px 9px;
+  transition: border-color .15s, color .15s;
 }
-.lang-toggle button + button { border-left: 1.5px solid var(--ink); }
-.lang-toggle button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
-.lang-toggle button:not([aria-pressed="true"]):hover { background: var(--bg); color: var(--ink); }
+.lang-toggle .on { color: var(--ink); font-weight: 700; }
+.lang-toggle .sep { opacity: .5; }
+.lang-toggle:hover { border-color: var(--line-2); color: var(--ink-2); }
 .header-right { display: flex; align-items: center; gap: 14px; min-width: 0; }
 .header-right .nav { min-width: 0; }
 @media (max-width: 640px) {
   .header-inner { position: relative; }
   .header-right { width: 100%; }
-  .lang-toggle { position: absolute; top: 10px; right: 16px; }
-  .lang-toggle button { padding: 5px 9px; font-size: 12px; }
+  .lang-toggle { position: absolute; top: 8px; right: 10px; }
 }
 .lang-note { font-family: var(--mono); font-size: 13px; color: var(--muted); background: var(--card); border: 1px dashed var(--line-2); border-radius: 12px; padding: 8px 12px; }
 html.lang-en .cv div { grid-template-columns: 112px 1fr; }
