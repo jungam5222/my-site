@@ -60,8 +60,8 @@ window.SITE = {
     hook: ['데이터톤 **1위**, 볼더링 **V7**.', '둘 중 뭐가 더 어려웠을까요?'],
     en: { hook: ['**1st** at a datathon, **V7** on the wall.', 'Guess which one was harder?'] },
     routes: [
-      { title: 'Projects', url: '/projects/', color: 'red',    grade: 'V4', teaser: '프로젝트 {projects}개. 1위 한 번, 상위 4% 한 번. 나머지 이야기는 들어가서 확인해 보세요.', en: { teaser: "{projects} projects. One 1st place, one top 4%. Climb in for the rest of the story." } },
       { title: 'About',    url: '/about/',    color: 'yellow', grade: 'V1', teaser: '과학고에서 컴퓨터학과 부학생회장까지. MBTI는 들어가 보면 알아요.', en: { teaser: "From a science high school to vice president of the CS student council. My MBTI is waiting inside." } },
+      { title: 'Projects', url: '/projects/', color: 'red',    grade: 'V4', teaser: '프로젝트 {projects}개. 1위 한 번, 상위 4% 한 번. 나머지 이야기는 들어가서 확인해 보세요.', en: { teaser: "{projects} projects. One 1st place, one top 4%. Climb in for the rest of the story." } },
       { title: 'Lab',      url: '/lab/',      color: 'blue',   grade: 'V3', teaser: '게임, 홀드 생성기, 지금 보고 있는 이 사이트까지. 그냥 만들어 보고 싶었던 것들.', en: { teaser: "A game, a hold generator, and the site you’re on right now. Things I just wanted to make." } },
       { title: 'Climbing', url: '/climbing/', color: 'purple', grade: '{best}', teaser: '최고 그레이드 {best}. 주말마다 어느 벽에 붙어 있는지 궁금하다면.', en: { teaser: "Best grade {best}. Curious which wall I’m hanging on every weekend?" } },
       { title: 'Game',     url: 'https://game.yunmin.dev', color: 'green', grade: 'V0', teaser: '남들이 못 떠올린 단어일수록 점수가 높아요. 한 판 해볼래요?', en: { teaser: "A Korean word game where the answers nobody else thinks of score highest. Up for a round?" } },
