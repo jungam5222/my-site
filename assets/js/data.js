@@ -72,7 +72,7 @@ window.SITE = {
   cv: [
     { label: '학력', value: '고려대학교 컴퓨터학과 · 수학과 이중전공 · 2학년', en: { label: "Education", value: "Korea University · Computer Science & Mathematics (double major) · 2nd year" } },
     { label: '관심 분야', value: 'LLM, 컴퓨터 비전, 데이터 분석 등', placeholder: true, en: { label: "Interests", value: "LLMs, computer vision, data analysis, and more" } },
-    { label: '대회', value: '해커톤 · 데이터톤 5회 참가 · AIKU 주니어톤 1위 · LG Aimers 상위 4%', en: { label: "Competitions", value: "5 hackathons & datathons · 1st at AIKU Juniorthon · Top 4% at LG Aimers" } },
+    { label: '대회', value: '해커톤 · 데이터톤 6회 참가 · AIKU 주니어톤 1위 · LG Aimers 상위 4%', en: { label: "Competitions", value: "6 hackathons & datathons · 1st at AIKU Juniorthon · Top 4% at LG Aimers" } },
     { label: '활동', value: '컴퓨터학과 부학생회장 · AIKU · KUICS · Liberty', en: { label: "Activities", value: "Vice president of the CS student council · AIKU · KUICS · Liberty" } },
   ],
 
@@ -95,6 +95,7 @@ window.SITE = {
     { date: '2026.08', title: 'AIKU 주니어톤', desc: '손글씨 필기 분류 / 1위', en: { title: "AIKU Juniorthon", desc: "Handwriting classification / 1st place" } },
     { date: '2026.09 – Now', title: '고려대학교 수학과 이중전공', desc: '', en: { title: "Korea University, Mathematics double major", desc: "" } },
     { date: '2026.09', title: '연고전 AI 해커톤', desc: '"깃발대항전" 게임 Agent 개발', en: { title: "Yonsei × Korea AI Hackathon", desc: "Built a game agent for \"Flag Battle\"" } },
+    { date: '2026.11', title: 'Inthon 2026 데이터톤 트랙', desc: '이미지 시퀀스 멀티모달 추론 / Public 0.599', en: { title: "Inthon 2026 Datathon Track", desc: "Multimodal reasoning over image sequences / public score 0.599" } },
   ],
 
   // 쓸데없는 about me
@@ -131,6 +132,21 @@ window.SITE = {
    * period, team: (선택) 상세 페이지 정보 칸에 표시. 예: period: '2026.08.01 – 08.02', team: '4인'
    */
   projects: [
+    {
+      title: 'Inthon 2026 데이터톤 트랙',
+      slug: 'inthon-2026',
+      type: 'datathon',
+      event: '고려대학교 정보대학',
+      date: '2026.11',
+      result: '',
+      role: '',
+      team: '3인 · Medoid Trio',
+      summary: '연속된 이미지 시퀀스를 가장 잘 설명하는 문장을 5개 선지 중에서 고르는 멀티모달 추론 문제. 텍스트 중심성(medoid)과 SmolVLM zero-shot 신호를 앙상블하고 파인튜닝해 Public 0.599.',
+      en: { title: "Inthon 2026 Datathon Track", event: "Korea University College of Informatics", team: "3 people · Medoid Trio", summary: "Multimodal reasoning: pick the caption that best describes an image sequence out of five. Ensembled text centrality (medoid) with a zero-shot SmolVLM signal, then fine-tuned, for a public score of 0.599." },
+      tags: ['Multimodal', 'SigLIP', 'SmolVLM', 'Data Augmentation'],
+      links: [],
+      featured: true,
+    },
     {
       title: '연고전 AI 해커톤',
       slug: 'yonkojeon-ai-hackathon',
@@ -189,7 +205,7 @@ window.SITE = {
       featured: true,
     },
     {
-      title: 'Inthon 데이터톤 트랙',
+      title: 'Inthon 2025 데이터톤 트랙',
       slug: 'inthon-2025',
       type: 'datathon',
       event: '고려대학교 정보대학',
@@ -197,7 +213,7 @@ window.SITE = {
       result: '',
       role: '',
       summary: '첫 데이터톤 참가.',
-      en: { title: "Inthon Datathon Track", event: "Korea University College of Informatics", summary: "My first datathon." },
+      en: { title: "Inthon 2025 Datathon Track", event: "Korea University College of Informatics", summary: "My first datathon." },
       tags: [],
       links: [],
       featured: true,
