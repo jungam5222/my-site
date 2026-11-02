@@ -3,8 +3,21 @@
  * 각 HTML의 <body data-page="..."> 값으로 어떤 페이지인지 구분해요.
  */
 (function () {
-  const S = window.SITE;
+  const LANG = window.LANG === 'en' ? 'en' : 'ko';
+  const EN = LANG === 'en';
+  const T = (ko, en) => (EN ? en : ko);
   const H = window.Holds;
+
+  // data.js 안의 en: { ... } 를 영어일 때 덮어씌우고, 한국어일 땐 그냥 지웁니다
+  function localize(v) {
+    if (Array.isArray(v)) return v.map(localize);
+    if (!v || typeof v !== 'object') return v;
+    const out = {};
+    Object.keys(v).forEach((k) => { if (k !== 'en') out[k] = localize(v[k]); });
+    if (EN && v.en && typeof v.en === 'object') Object.keys(v.en).forEach((k) => { out[k] = localize(v.en[k]); });
+    return out;
+  }
+  const S = localize(window.SITE);
   const P = S.profile;
   const page = document.body.dataset.page || 'home';
   const navKey = document.body.dataset.nav || page;
@@ -13,7 +26,7 @@
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const hex = (c) => H.resolveColor(c);
   const pad = (n) => String(n).padStart(2, '0');
-  const ph = (o) => (o && o.placeholder ? '<span class="ph" title="아직 채우지 않은 내용">예시</span>' : '');
+  const ph = (o) => (o && o.placeholder ? `<span class="ph" title="${T('아직 채우지 않은 내용', 'Not filled in yet')}">${T('예시', 'sample')}</span>` : '');
   const isExternal = (url) => /^https?:/.test(url);
   const linkAttrs = (url) => (isExternal(url) ? ' target="_blank" rel="noopener"' : '');
 
@@ -25,7 +38,7 @@
   const projectColor = (p) => seq(projectsSorted.indexOf(p));
   const labColor = (l) => seq(S.lab.indexOf(l));
 
-  const TYPE_LABEL = { hackathon: '해커톤', datathon: '데이터톤', project: '프로젝트' };
+  const TYPE_LABEL = EN ? { hackathon: 'Hackathon', datathon: 'Datathon', project: 'Project' } : { hackathon: '해커톤', datathon: '데이터톤', project: '프로젝트' };
   const TYPE_COLOR = { hackathon: 'pink', datathon: 'yellow', project: 'green' };
 
   const NAV = [
@@ -42,15 +55,24 @@
     el.className = 'site-header';
     el.innerHTML = `
       <div class="wrap header-inner">
-        <a class="logo" href="/" aria-label="yunmin.dev 홈">
+        <a class="logo" href="/" aria-label="${T('yunmin.dev 홈', 'yunmin.dev home')}">
           ${H.svg({ seed: 7, type: 'jug', color: 'red', size: 28, rotate: 20 })}
           <span>yunmin<b>.dev</b></span>
         </a>
-        <nav class="nav" aria-label="주요 메뉴">
-          ${NAV.map((n) => `<a href="${n.url}"${n.ext ? linkAttrs(n.url) : ''}${n.key === navKey ? ' aria-current="page"' : ''}>${n.label}${n.ext ? '<span class="ext">↗</span>' : ''}</a>`).join('')}
-        </nav>
+        <div class="header-right">
+          <nav class="nav" aria-label="${T('주요 메뉴', 'Main menu')}">
+            ${NAV.map((n) => `<a href="${n.url}"${n.ext ? linkAttrs(n.url) : ''}${n.key === navKey ? ' aria-current="page"' : ''}>${n.label}${n.ext ? '<span class="ext">↗</span>' : ''}</a>`).join('')}
+          </nav>
+          <div class="lang-toggle" role="group" aria-label="${T('언어', 'Language')}">
+            <button type="button" data-lang="ko" aria-pressed="${!EN}" lang="ko">KO</button><button type="button" data-lang="en" aria-pressed="${EN}" lang="en">EN</button>
+          </div>
+        </div>
       </div>`;
     document.body.prepend(el);
+    el.querySelector('.lang-toggle').addEventListener('click', (e) => {
+      const b = e.target.closest('button[data-lang]');
+      if (b && b.dataset.lang !== LANG) window.setLang(b.dataset.lang);
+    });
     const onScroll = () => el.classList.toggle('scrolled', window.scrollY > 8);
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
@@ -73,18 +95,18 @@
         <div class="footer-grid">
           <div>
             <p class="footer-title">yunmin<b>.dev</b></p>
-            <p class="muted">${esc(P.nameKo)}의 작업실. 만들고, 배우고, 오릅니다.</p>
+            <p class="muted">${T(`${esc(P.nameKo)}의 작업실. 만들고, 배우고, 오릅니다.`, `${esc(P.nameEn)}'s workshop. Build, learn, climb.`)}</p>
           </div>
           <div>
-            <p class="footer-label">둘러보기</p>
+            <p class="footer-label">${T('둘러보기', 'Explore')}</p>
             <a href="/">Home</a>${NAV.filter((n) => !n.ext).map((n) => `<a href="${n.url}">${n.label}</a>`).join('')}
           </div>
           <div>
-            <p class="footer-label">다른 곳</p>
+            <p class="footer-label">${T('다른 곳', 'Elsewhere')}</p>
             ${S.elsewhere.map((e) => `<a href="${e.url}"${linkAttrs(e.url)}>${esc(e.title)} ↗</a>`).join('')}
           </div>
           <div>
-            <p class="footer-label">연락</p>
+            <p class="footer-label">${T('연락', 'Contact')}</p>
             ${contactLinks().map((l) => `<a href="${l.url}"${linkAttrs(l.url)}>${esc(l.label)}</a>`).join('')}
           </div>
         </div>
@@ -104,7 +126,7 @@
         <span class="tape" style="--c:${hex(color)}">${num}</span>
         <h2>${title}</h2>
         ${sub ? `<span class="sec-sub">${sub}</span>` : ''}
-        ${more ? `<a class="sec-more" href="${more}">전체 보기 →</a>` : ''}
+        ${more ? `<a class="sec-more" href="${more}">${T('전체 보기', 'See all')} →</a>` : ''}
       </div>`;
   }
 
@@ -167,9 +189,9 @@
         <p class="p-event">${esc(p.event)}</p>
         ${p.result ? `<p class="p-result">🏆 ${esc(p.result)}</p>` : ''}
         ${p.summary ? `<p>${esc(p.summary)}</p>` : ''}
-        ${p.role ? `<p class="p-role"><b>역할</b> ${esc(p.role)}</p>` : ''}
+        ${p.role ? `<p class="p-role"><b>${T('역할', 'Role')}</b> ${esc(p.role)}</p>` : ''}
         <div class="chips">${(p.tags || []).map((t) => `<span class="chip">${esc(t)}</span>`).join('')}</div>
-        <span class="p-more">자세히 보기 →</span>
+        <span class="p-more">${T('자세히 보기', 'Read more')} →</span>
       </a>`;
   }
 
@@ -240,7 +262,7 @@
         holds.push(`
           <button class="wall-hold${isTop ? ' is-top' : ''}" type="button" data-route="${ri}" data-idx="${hi}"
             style="left:${x}%;top:${y}%;--w:${(size / 5).toFixed(1)}%;--c:${hex(r.color)}"
-            aria-label="${isTop ? `${esc(r.title)}(으)로 가기` : `${esc(r.title)} 루트 ${hi + 1}번 홀드`}">
+            aria-label="${isTop ? T(`${esc(r.title)}(으)로 가기`, `Go to ${esc(r.title)}`) : T(`${esc(r.title)} 루트 ${hi + 1}번 홀드`, `${esc(r.title)} route, hold ${hi + 1}`)}">
             ${H.svg({ seed: seed++ * 13, color: r.color, size })}
             ${isStart ? `<span class="start-tape" style="--c:${hex(r.color)}">${esc(r.grade)}</span>` : ''}
             ${isTop ? `<span class="top-tape">${esc(r.title)} ↑</span>` : ''}
@@ -249,7 +271,7 @@
     });
     root.innerHTML = `
       <div class="wall-inner">${holds.join('')}</div>
-      <div class="wall-hint" aria-live="polite">홀드를 눌러 루트를 골라 보세요</div>`;
+      <div class="wall-hint" aria-live="polite">${T('홀드를 눌러 루트를 골라 보세요', 'Tap a hold to pick a route')}</div>`;
 
     const hint = $('.wall-hint', root);
     const touched = routes.map(() => new Set());
@@ -261,8 +283,8 @@
       cards.forEach((c, k) => c.classList.toggle('lit', k === +ri));
       const r = routes[ri];
       hint.textContent = touched[ri].size
-        ? `${r.title} · ${touched[ri].size}/${r.holds.length} · TOP을 누르면 출발`
-        : `${r.title} 루트 · ${r.grade} · TOP을 누르면 출발`;
+        ? `${r.title} · ${touched[ri].size}/${r.holds.length} · ${T('TOP을 누르면 출발', 'tap TOP to go')}`
+        : `${r.title} ${T('루트', 'route')} · ${r.grade} · ${T('TOP을 누르면 출발', 'tap TOP to go')}`;
     };
     root._focus = focus;
 
@@ -282,7 +304,7 @@
       touched[ri].add(+b.dataset.idx);
       if (b.classList.contains('is-top')) {
         const sent = touched[ri].size === r.holds.length;
-        hint.textContent = sent ? `${r.title} 완등! 🎉` : `${r.title}(으)로 올라가는 중…`;
+        hint.textContent = sent ? T(`${r.title} 완등! 🎉`, `${r.title} sent! 🎉`) : T(`${r.title}(으)로 올라가는 중…`, `Climbing to ${r.title}…`);
         hint.classList.add('sent');
         if (sent) burst(b);
         setTimeout(() => { hint.classList.remove('sent'); go(r.url); }, sent ? 750 : 380);
@@ -328,7 +350,7 @@
     if (secs.length < 3) return;
     const nav = document.createElement('nav');
     nav.className = 'route-nav';
-    nav.setAttribute('aria-label', '섹션 이동');
+    nav.setAttribute('aria-label', T('섹션 이동', 'Jump to section'));
     nav.innerHTML = secs.slice().reverse().map((s, i) => `
       <a href="#${s.id}" data-target="${s.id}" style="--c:${hex(s.dataset.color)}" title="${esc(s.dataset.title || s.id)}">
         ${H.svg({ seed: 600 + i, color: s.dataset.color, size: 22 })}
@@ -380,9 +402,9 @@
     const slug = location.pathname.split('/').filter(Boolean)[1];
     const p = cfg.list.find((x) => x.slug === slug);
     if (!p) {
-      root.innerHTML = `<div class="wrap page-hero"><p class="eyebrow">/${cfg.base}/${esc(slug)}</p><h1>${cfg.label}을 찾을 수 없어요</h1>
-        <p class="lead">data.js에 slug: '${esc(slug)}' 항목이 있는지 확인해 주세요.</p>
-        <div class="hero-cta"><a class="btn" href="/${cfg.base}/">← 목록으로</a></div></div>`;
+      root.innerHTML = `<div class="wrap page-hero"><p class="eyebrow">/${cfg.base}/${esc(slug)}</p><h1>${T(`${cfg.label}을 찾을 수 없어요`, `${cfg.label} not found`)}</h1>
+        <p class="lead">${T(`data.js에 slug: '${esc(slug)}' 항목이 있는지 확인해 주세요.`, `There is no entry with slug '${esc(slug)}' in data.js.`)}</p>
+        <div class="hero-cta"><a class="btn" href="/${cfg.base}/">← ${T('목록으로', 'Back to list')}</a></div></div>`;
       return;
     }
     document.title = `${p.title} · yunmin.dev`;
@@ -417,20 +439,26 @@
                 `<a class="btn${j === 0 ? ' primary' : ''}" href="${l.url}"${linkAttrs(l.url)}>${esc(l.label)} ${isExternal(l.url) ? '↗' : '→'}</a>`).join('')}</div>` : ''}
             </div>
           </aside>
-          <article class="prose" id="project-body"><p class="muted">불러오는 중…</p></article>
+          <article class="prose" id="project-body"><p class="muted">${T('불러오는 중…', 'Loading…')}</p></article>
         </div>
       </section>
-      <nav class="wrap proj-nav" aria-label="다른 ${cfg.label}">
+      <nav class="wrap proj-nav" aria-label="${T(`다른 ${cfg.label}`, `More ${cfg.label}s`)}">
         ${prev ? navCard(prev, cfg.prevLabel, '') : '<span></span>'}
         ${next ? navCard(next, cfg.nextLabel, ' next') : '<span></span>'}
       </nav>`;
 
     const body = $('#project-body');
     // content: 다른 폴더의 content.md를 같이 쓰고 싶을 때 (예: '/projects/yunmin-dev/content.md')
-    fetch(p.content || `/${cfg.base}/${p.slug}/content.md`, { cache: 'no-cache' })
-      .then((r) => (r.ok ? r.text() : Promise.reject(r.status)))
-      .then((md) => {
-        body.innerHTML = window.marked ? window.marked.parse(md) : `<pre>${esc(md)}</pre>`;
+    // 영어일 땐 같은 폴더의 content.en.md를 먼저 찾고, 없으면 한국어 content.md를 보여줘요
+    const koPath = p.content || `/${cfg.base}/${p.slug}/content.md`;
+    const get = (u) => fetch(u, { cache: 'no-cache' }).then((r) => (r.ok ? r.text() : Promise.reject(r.status)));
+    const load = EN
+      ? get(koPath.replace(/\.md$/, '.en.md')).then((md) => [md, false]).catch(() => get(koPath).then((md) => [md, true]))
+      : get(koPath).then((md) => [md, false]);
+    load
+      .then(([md, fallback]) => {
+        body.innerHTML = (fallback ? '<p class="lang-note">This page is only written in Korean for now.</p>' : '')
+          + (window.marked ? window.marked.parse(md) : `<pre>${esc(md)}</pre>`);
         // 소제목마다 작은 홀드
         const colors = H.COLOR_KEYS;
         body.querySelectorAll('h2').forEach((h, j) => {
@@ -439,7 +467,7 @@
         body.querySelectorAll('a[href^="http"]').forEach((a) => { a.target = '_blank'; a.rel = 'noopener'; });
       })
       .catch(() => {
-        body.innerHTML = '<p class="muted">상세 설명을 아직 작성하는 중이에요. 🧗</p>';
+        body.innerHTML = `<p class="muted">${T('상세 설명을 아직 작성하는 중이에요.', 'The write-up is still in progress.')} 🧗</p>`;
       });
   }
 
@@ -464,22 +492,22 @@
     },
 
     about() {
-      fill('about-name', `${esc(P.nameKo)} <span class="muted">${esc(P.nameEn)}</span>`);
+      fill('about-name', EN ? `${esc(P.nameEn)} <span class="muted">${esc(P.nameKo)}</span>` : `${esc(P.nameKo)} <span class="muted">${esc(P.nameEn)}</span>`);
       fill('about-intro', esc(P.intro));
-      fill('cv-head', secHead('01', '요약', '', 'red'));
+      fill('cv-head', secHead('01', T('요약', 'Summary'), '', 'red'));
       fill('about-cv', cvList());
-      fill('now-head', secHead('02', 'Now', '요즘 하고 있는 것', 'orange'));
+      fill('now-head', secHead('02', 'Now', T('요즘 하고 있는 것', 'What I’m up to'), 'orange'));
       fill('now-list', nowList());
-      fill('tl-head', secHead('03', '지나온 길', '', 'blue'));
+      fill('tl-head', secHead('03', T('지나온 길', 'Path so far'), '', 'blue'));
       fill('timeline', S.timeline.map((t, i) => `
         <li style="--c:${hex(seq(i))}">
           <span class="tl-hold">${H.svg({ seed: 700 + i, color: seq(i), size: 30 })}</span>
           <span class="tl-date">${esc(t.date)}</span>
           <div><p class="tl-title">${esc(t.title)}${ph(t)}</p><p class="muted">${esc(t.desc)}</p></div>
         </li>`).join(''));
-      fill('stack-head', secHead('04', 'Toolbox', '자주 쓰는 도구', 'teal'));
+      fill('stack-head', secHead('04', 'Toolbox', T('자주 쓰는 도구', 'Tools I reach for'), 'teal'));
       fill('stack-list', stackList());
-      fill('facts-head', secHead('05', '쓸데없는 About Me', '', 'purple'));
+      fill('facts-head', secHead('05', T('쓸데없는 About Me', 'Useless facts about me'), '', 'purple'));
       fill('about-facts', factCards());
       fill('contact-links', contactLinks().map((l) => `<a class="btn" href="${l.url}"${linkAttrs(l.url)}>${esc(l.label)} ↗</a>`).join(''));
     },
@@ -489,7 +517,7 @@
       const sorted = projectsSorted;
       list.innerHTML = sorted.map(projectCard).join('');
       const counts = sorted.reduce((m, p) => ((m[p.type] = (m[p.type] || 0) + 1), m), {});
-      const filters = [['all', '전체', sorted.length], ...Object.keys(TYPE_LABEL).map((k) => [k, TYPE_LABEL[k], counts[k] || 0])];
+      const filters = [['all', T('전체', 'All'), sorted.length], ...Object.keys(TYPE_LABEL).map((k) => [k, TYPE_LABEL[k], counts[k] || 0])];
       const bar = $('#filters');
       bar.innerHTML = filters.map(([k, label, n]) =>
         `<button type="button" class="filter${k === 'all' ? ' on' : ''}" data-f="${k}" style="--c:${hex(TYPE_COLOR[k] || 'orange')}">${label} <span>${n}</span></button>`).join('');
@@ -503,23 +531,23 @@
 
     project() {
       renderDetail({
-        base: 'projects', list: projectsSorted, color: projectColor, label: '프로젝트', panel: '프로젝트 정보',
+        base: 'projects', list: projectsSorted, color: projectColor, label: T('프로젝트', 'project'), panel: T('프로젝트 정보', 'Project info'),
         url: projectUrl, seed: projectSeed,
         tag: (p) => `<span class="tag" style="--c:${hex(TYPE_COLOR[p.type])}">${TYPE_LABEL[p.type] || p.type}</span>`,
         lead: (p) => p.summary,
-        meta: (p) => [['대회', p.event], ['기간', p.period || p.date], ['결과', p.result], ['역할', p.role], ['팀', p.team]],
-        prevLabel: '← 최근 프로젝트', nextLabel: '이전 프로젝트 →',
+        meta: (p) => [[T('대회', 'Event'), p.event], [T('기간', 'Period'), p.period || p.date], [T('결과', 'Result'), p.result], [T('역할', 'Role'), p.role], [T('팀', 'Team'), p.team]],
+        prevLabel: T('← 최근 프로젝트', '← Newer project'), nextLabel: T('이전 프로젝트 →', 'Older project →'),
       });
     },
 
     'lab-item'() {
       renderDetail({
-        base: 'lab', list: S.lab.filter((l) => l.slug || l.url), color: labColor, label: '실험', panel: '실험 정보',
+        base: 'lab', list: S.lab.filter((l) => l.slug || l.url), color: labColor, label: T('실험', 'experiment'), panel: T('실험 정보', 'Experiment info'),
         url: labUrl, seed: (l) => 400 + S.lab.indexOf(l),
         tag: (l) => statusTag(l),
         lead: (l) => l.desc,
-        meta: (l) => [['날짜', l.period || l.date], ['상태', l.status === 'live' ? '운영 중' : '준비 중'], ['역할', l.role]],
-        prevLabel: '← 이전 실험', nextLabel: '다음 실험 →',
+        meta: (l) => [[T('날짜', 'Date'), l.period || l.date], [T('상태', 'Status'), l.status === 'live' ? T('운영 중', 'Live') : T('준비 중', 'Coming soon')], [T('역할', 'Role'), l.role]],
+        prevLabel: T('← 이전 실험', '← Previous'), nextLabel: T('다음 실험 →', 'Next →'),
       });
     },
 
@@ -530,11 +558,11 @@
     climbing() {
       const C = S.climbing;
       fill('climb-stats', [
-        ['시작', C.since], ['최고 그레이드', C.best], ['홈짐', C.home], ['스타일', C.style],
+        [T('시작', 'Since'), C.since], [T('최고 그레이드', 'Best grade'), C.best], [T('홈짐', 'Home gym'), C.home], [T('스타일', 'Style'), C.style],
       ].map(([k, v], i) => `
         <div class="stat" style="--c:${hex(['red', 'orange', 'blue', 'green'][i])}">
           <span class="stat-k">${k}</span><span class="stat-v">${esc(v)}</span>
-        </div>`).join('') + (C.placeholder ? '<p class="muted small">아직 예시 값이에요.</p>' : ''));
+        </div>`).join('') + (C.placeholder ? `<p class="muted small">${T('아직 예시 값이에요.', 'These are sample values for now.')}</p>` : ''));
 
       const max = Math.max(1, ...C.grades.map((g) => g.count));
       const gradeColors = ['yellow', 'orange', 'green', 'blue', 'red', 'purple', 'pink', 'teal', 'lime'];
@@ -569,12 +597,28 @@
     },
   };
 
+  /* ---------- HTML에 직접 적힌 글자 (영어) ---------- */
+  // data-en="..."      → 영어일 때 안쪽 내용을 이걸로 바꿔요 (title, meta는 content)
+  // data-en-label="..." → aria-label,  data-en-title="..." → 섹션의 data-title
+  function applyStaticText() {
+    if (!EN) return;
+    document.querySelectorAll('[data-en]').forEach((el) => {
+      if (el.tagName === 'META') el.setAttribute('content', el.dataset.en);
+      else if (el.tagName === 'TITLE') document.title = el.dataset.en;
+      else el.innerHTML = el.dataset.en;
+    });
+    document.querySelectorAll('[data-en-label]').forEach((el) => el.setAttribute('aria-label', el.dataset.enLabel));
+    document.querySelectorAll('[data-en-title]').forEach((el) => { el.dataset.title = el.dataset.enTitle; });
+  }
+
   /* ---------- 실행 ---------- */
   document.body.id = 'top';
+  applyStaticText();
   renderHeader();
   (pages[page] || (() => {}))();
   renderFooter();
   decorateContact();
   renderRouteNav();
   reveal();
+  document.documentElement.classList.add('i18n-ready');
 })();

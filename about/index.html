@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>About · yunmin.dev</title>
-  <meta name="description" content="홍윤민 소개: CV 요약, 지나온 길, 자주 쓰는 도구, 그리고 쓸데없는 이야기.">
+  <meta name="description" content="홍윤민 소개: CV 요약, 지나온 길, 자주 쓰는 도구, 그리고 쓸데없는 이야기." data-en="About Yunmin Hong: CV summary, the path so far, tools, and some useless facts.">
   <meta name="theme-color" content="#FBF8F1">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -13,9 +13,10 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="/assets/css/site.css">
+  <script src="/assets/js/i18n.js"></script>
 </head>
 <body data-page="about">
-  <a class="skip" href="#main">본문으로 건너뛰기</a>
+  <a class="skip" href="#main" data-en="Skip to content">본문으로 건너뛰기</a>
   <main id="main">
     <header class="page-hero">
       <div class="wrap">
@@ -25,7 +26,7 @@
       </div>
     </header>
 
-    <section id="summary" data-color="red" data-title="요약">
+    <section id="summary" data-color="red" data-title="요약" data-en-title="Summary">
       <div class="wrap">
         <div id="cv-head"></div>
         <div class="panel reveal"><div id="about-cv"></div></div>
@@ -39,7 +40,7 @@
       </div>
     </section>
 
-    <section id="path" data-color="yellow" data-title="지나온 길">
+    <section id="path" data-color="yellow" data-title="지나온 길" data-en-title="Path">
       <div class="wrap">
         <div id="tl-head"></div>
         <ol class="timeline reveal" id="timeline"></ol>
@@ -63,8 +64,8 @@
     <section id="contact" data-color="teal" data-title="Contact">
       <div class="wrap">
         <div class="contact reveal">
-          <h2>연락은 언제든 환영이에요</h2>
-          <p>커피챗, 해커톤 팀 구성, 같이 볼더링 하기 전부 좋아요.</p>
+          <h2 data-en="Always happy to hear from you">연락은 언제든 환영이에요</h2>
+          <p data-en="Coffee chats, hackathon teams, a bouldering session. All welcome.">커피챗, 해커톤 팀 구성, 같이 볼더링 하기 전부 좋아요.</p>
           <div class="hero-cta" id="contact-links"></div>
         </div>
       </div>

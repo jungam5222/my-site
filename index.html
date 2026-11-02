@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>홍윤민 · yunmin.dev</title>
-  <meta name="description" content="AI 개발자 홍윤민의 작업실. 해커톤·데이터톤 프로젝트, 웹 개발 실험, 그리고 클라이밍.">
+  <title data-en="Yunmin Hong · yunmin.dev">홍윤민 · yunmin.dev</title>
+  <meta name="description" content="AI 개발자 홍윤민의 작업실. 해커톤·데이터톤 프로젝트, 웹 개발 실험, 그리고 클라이밍." data-en="Workshop of AI developer Yunmin Hong: hackathon and datathon projects, web experiments, and climbing.">
   <meta property="og:title" content="홍윤민 · yunmin.dev">
   <meta property="og:description" content="AI 개발자 홍윤민의 작업실. 만들고, 배우고, 오릅니다.">
   <meta property="og:url" content="https://yunmin.dev/">
@@ -17,24 +17,25 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="/assets/css/site.css">
+  <script src="/assets/js/i18n.js"></script>
 </head>
 <body data-page="home">
-  <a class="skip" href="#main">본문으로 건너뛰기</a>
+  <a class="skip" href="#main" data-en="Skip to content">본문으로 건너뛰기</a>
   <main id="main">
     <section class="hero home-hero" id="hello">
       <div class="wrap hero-grid">
         <div>
           <div class="hero-meta" id="hero-meta"></div>
-          <p class="hero-hello">안녕하세요, 👋</p>
+          <p class="hero-hello" data-en="Hi there, 👋">안녕하세요, 👋</p>
           <h1 id="hero-name">Yunmin Hong</h1>
           <p class="hero-hook" id="hero-hook"></p>
-          <p class="hero-how">
+          <p class="hero-how" data-en="Pick a route on the wall <span class=&quot;how-wide&quot;>to the right</span><span class=&quot;how-narrow&quot;>below</span> and tap its <b>TOP</b>. Every top opens a different room.">
             <span class="how-wide">오른쪽 벽에서</span><span class="how-narrow">아래 벽에서</span>
             루트를 골라 <b>TOP</b>을 눌러 보세요. 꼭대기마다 다른 방이 있어요.
           </p>
-          <a class="hero-skip" href="#routes">그냥 목록으로 볼래요 ↓</a>
+          <a class="hero-skip" href="#routes" data-en="Just show me the list ↓">그냥 목록으로 볼래요 ↓</a>
         </div>
-        <div class="wall" id="wall" role="group" aria-label="루트를 골라 하위 페이지로 가는 클라이밍 벽"></div>
+        <div class="wall" id="wall" role="group" aria-label="루트를 골라 하위 페이지로 가는 클라이밍 벽" data-en-label="Climbing wall: each route leads to a page"></div>
       </div>
     </section>
 
@@ -42,7 +43,7 @@
       <div class="wrap">
         <div class="sec-head">
           <span class="tape" style="--c:#2B2622">START</span>
-          <h2>어디부터 올라갈까요?</h2>
+          <h2 data-en="Where do you want to climb first?">어디부터 올라갈까요?</h2>
         </div>
         <div class="route-cards" id="route-cards"></div>
       </div>

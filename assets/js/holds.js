@@ -5,15 +5,15 @@
  */
 (function () {
   const PALETTE = {
-    red:    { ko: '빨강', hex: '#E5483B' },
-    orange: { ko: '주황', hex: '#F2892B' },
-    yellow: { ko: '노랑', hex: '#F2BE22' },
-    lime:   { ko: '연두', hex: '#8DC63F' },
-    green:  { ko: '초록', hex: '#2E9E5B' },
-    teal:   { ko: '청록', hex: '#1FA5A0' },
-    blue:   { ko: '파랑', hex: '#2F6BDB' },
-    purple: { ko: '보라', hex: '#8B55D6' },
-    pink:   { ko: '분홍', hex: '#EE6AA7' },
+    red:    { ko: '빨강', en: 'Red', hex: '#E5483B' },
+    orange: { ko: '주황', en: 'Orange', hex: '#F2892B' },
+    yellow: { ko: '노랑', en: 'Yellow', hex: '#F2BE22' },
+    lime:   { ko: '연두', en: 'Lime', hex: '#8DC63F' },
+    green:  { ko: '초록', en: 'Green', hex: '#2E9E5B' },
+    teal:   { ko: '청록', en: 'Teal', hex: '#1FA5A0' },
+    blue:   { ko: '파랑', en: 'Blue', hex: '#2F6BDB' },
+    purple: { ko: '보라', en: 'Purple', hex: '#8B55D6' },
+    pink:   { ko: '분홍', en: 'Pink', hex: '#EE6AA7' },
   };
   const COLOR_KEYS = Object.keys(PALETTE);
 
