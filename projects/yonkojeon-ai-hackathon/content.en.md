@@ -2,7 +2,7 @@
 
 I took part in the **Yonsei × Korea AI Hackathon**, co-hosted by the student councils of the Yonsei College of AI Convergence and the Korea University College of Informatics. Teams built bots for **"Flag Battle" (Campus Conquest)**, a two-player strategy game, and pitted them against each other.
 
-We entered as a three-person team, **마른하늘에 날벼樂**. There was no split of roles: each of us built our own bot. We finished **28th of 104 teams** on the final leaderboard.
+We entered as a three-person team, **마른하늘에 날벼樂**. There was no split of roles: each of us built our own bot. We finished **27th of 104 teams** on the final leaderboard.
 
 ## The game
 
@@ -44,7 +44,7 @@ Three stages on a local simulator with the real time limits: 80 games per featur
 
 ## Results
 
-Final leaderboard: **28th of 104 teams**.
+Final leaderboard: **27th of 104 teams**.
 
 | nova9 vs nova8, 100 games | nova9 | nova8 |
 | --- | --- | --- |

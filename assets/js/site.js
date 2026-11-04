@@ -28,7 +28,7 @@
   const pad = (n) => String(n).padStart(2, '0');
   const ph = (o) => (o && o.placeholder ? `<span class="ph" title="${T('아직 채우지 않은 내용', 'Not filled in yet')}">${T('예시', 'sample')}</span>` : '');
   const isExternal = (url) => /^https?:/.test(url);
-  const linkAttrs = (url) => (isExternal(url) ? ' target="_blank" rel="noopener"' : '');
+  const linkAttrs = (url) => (isExternal(url) || /\.pdf$/i.test(url) ? ' target="_blank" rel="noopener"' : '');
 
   // 번호가 붙는 것들(섹션, 프로젝트, Lab, 타임라인)은 이 순서대로 색을 받습니다
   const ORDER = H.COLOR_KEYS; // 빨강 주황 노랑 연두 초록 청록 파랑 보라 분홍
