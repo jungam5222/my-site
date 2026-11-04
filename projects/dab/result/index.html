@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>잠실 평일 가격 비교 · yunmin.dev</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+:root {
+  --paper: #F3F4F7;
+  --card: #FFFFFF;
+  --field: #F7F8FB;
+  --ink: #161E33;
+  --ink-2: #576078;
+  --rule: #D9DEE8;
+  --stub: #BE333C;
+  --stub-ink: #FFFFFF;
+  --accent: #AF2F38;
+  --ring: rgba(190, 51, 60, 0.22);
+  --good: #1B7448;
+  --warn: #8C5208;
+  --warn-bg: #FBF0DF;
+  --seg-on: #161E33;
+  --seg-on-ink: #FFFFFF;
+  --shadow: 0 1px 2px rgba(22, 30, 51, 0.06), 0 12px 32px rgba(22, 30, 51, 0.08);
+  --font-display: "Black Han Sans", "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-body: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0D111A; --card: #161C29; --field: #1C2332; --ink: #E6E9F1; --ink-2: #9BA3B6; --rule: #2C3446;
+    --stub: #A62E37; --stub-ink: #FFF4F4; --accent: #F28B91; --ring: rgba(242, 139, 145, 0.3);
+    --good: #66C997; --warn: #E7AA5C; --warn-bg: #2D2416; --seg-on: #E6E9F1; --seg-on-ink: #0D111A;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 12px 32px rgba(0, 0, 0, 0.3);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0D111A; --card: #161C29; --field: #1C2332; --ink: #E6E9F1; --ink-2: #9BA3B6; --rule: #2C3446;
+  --stub: #A62E37; --stub-ink: #FFF4F4; --accent: #F28B91; --ring: rgba(242, 139, 145, 0.3);
+  --good: #66C997; --warn: #E7AA5C; --warn-bg: #2D2416; --seg-on: #E6E9F1; --seg-on-ink: #0D111A;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 12px 32px rgba(0, 0, 0, 0.3);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+}
+.page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-block: 32px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid;
+  gap: 28px;
+}
+
+.masthead { display: grid; gap: 8px; max-width: 68ch; }
+.back { margin: 0 0 4px; font-size: 13px; }
+.back a { color: var(--ink-2); text-decoration: none; }
+.back a:hover { color: var(--accent); text-decoration: underline; }
+.kicker { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; color: var(--accent); }
+h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(30px, 5vw, 44px);
+  line-height: 1.12;
+  text-wrap: balance;
+}
+.lead { margin: 0; color: var(--ink-2); }
+
+/* 간소화 앱에서 새로 쓰는 스타일 (색은 모두 template.html의 토큰) */
+.layout { display: grid; grid-template-columns: minmax(0, 380px) minmax(0, 1fr); gap: 24px 28px; align-items: start; }
+@media (max-width: 880px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+.sheet, .card { min-width: 0; background: var(--card); border: 1px solid var(--rule); border-radius: 14px; padding: 18px 20px; }
+.sheet { display: grid; gap: 22px; }
+.group { display: grid; gap: 12px; }
+h2 { margin: 0; font-size: 16px; font-weight: 700; }
+select { width: 100%; min-width: 0; padding: 10px 12px; font: inherit; font-size: 16px; color: var(--ink);
+         background: var(--field); border: 1px solid var(--rule); border-radius: 9px; }
+select:focus-visible, input[type="range"]:focus-visible, .reset:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.env-row { display: grid; grid-template-columns: 5.5em minmax(0, 1fr) 4.5em; align-items: center; gap: 10px; }
+.env-row label { font-size: 14px; font-weight: 600; }
+.env-row select { grid-column: 2 / -1; }
+.env-row input[type="range"] { width: 100%; margin: 0; accent-color: var(--stub); }
+.env-row output { text-align: right; font-variant-numeric: tabular-nums; }
+.hint { margin: 0; font-size: 12.5px; color: var(--ink-2); }
+.reset { justify-self: start; padding: 7px 14px; font: inherit; font-size: 13px; font-weight: 600; color: var(--ink);
+         background: var(--card); border: 1px solid var(--rule); border-radius: 999px; cursor: pointer; }
+.results { min-width: 0; display: grid; gap: 16px; }
+.eyebrow { margin: 0; font-size: 13px; font-weight: 600; color: var(--ink-2); }
+.price { margin: 6px 0 4px; font-family: var(--font-display); font-size: clamp(48px, 8vw, 64px); line-height: 1; font-variant-numeric: tabular-nums; }
+.price .won { margin-left: 4px; font-size: 0.42em; }
+.delta, .card p { margin: 0; }
+.profit { margin: 6px 0; font-family: var(--font-display); font-size: 40px; line-height: 1; color: var(--good); }
+.down { color: var(--accent) !important; }
+.compare { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.compare caption { margin-bottom: 8px; text-align: left; font-size: 13px; font-weight: 600; color: var(--ink-2); }
+.compare th, .compare td { padding: 9px 6px; text-align: right; border-bottom: 1px solid var(--rule); }
+.compare thead th { font-size: 12.5px; font-weight: 600; color: var(--ink-2); }
+.compare tbody th { text-align: left; font-weight: 600; }
+@media (max-width: 560px) {
+  .compare thead { display: none; }
+  .compare tr { display: grid; gap: 4px; padding: 10px 0; border-bottom: 1px solid var(--rule); }
+  .compare tbody th { padding: 0 0 2px; border: 0; }
+  .compare td { display: flex; justify-content: space-between; gap: 12px; padding: 0; border: 0; }
+  .compare td::before { font-size: 13px; color: var(--ink-2); }
+  .compare td:nth-of-type(1)::before { content: "모델 가격일 때"; }
+  .compare td:nth-of-type(2)::before { content: "2025 실제"; }
+  .compare td:nth-of-type(3)::before { content: "차이"; }
+}
+.charts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 560px) { .charts { grid-template-columns: minmax(0, 1fr); } }
+.bars { margin: 0; display: grid; gap: 8px; }
+.bars figcaption { font-weight: 700; }
+.axis-y, .axis-x { margin: 0; font-size: 12px; color: var(--ink-2); }
+.bars .row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 8px; align-items: center; }
+.bars .lab { grid-column: 1 / -1; font-size: 13px; }
+.track { position: relative; height: 16px; background: var(--field); border-radius: 4px; }
+.track.cap::after { content: ""; position: absolute; left: 95%; top: -3px; bottom: -3px; border-left: 2px dashed var(--ink-2); }
+.bar { height: 100%; border-radius: 4px; }
+.bar.actual { background: var(--ink-2); }
+.bar.model { background: var(--stub); }
+.val { font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.foot { max-width: 82ch; padding-top: 14px; font-size: 12.5px; color: var(--ink-2); border-top: 1px solid var(--rule); }
+.foot p { margin: 0; }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="masthead">
+    <p class="back"><a href="/projects/dab/">← 프로젝트 소개로</a></p>
+    <p class="kicker">한롯기두키 · KBO 다이나믹 프라이싱</p>
+    <h1>2025 잠실 평일, 모델 가격이었다면?</h1>
+    <p class="lead">경기와 그날의 환경을 고르면 우리 모델의 가격과 2025년 실제 결과를 나란히 보여 줘요.</p>
+  </header>
+  <main class="layout">
+    <form class="sheet" id="form" novalidate>
+      <section class="group">
+        <h2>① 경기 고르기</h2>
+        <select id="f-game" aria-label="2025 잠실 평일 경기"></select>
+      </section>
+      <section class="group" id="env">
+        <h2>② 환경 고르기</h2>
+        <div class="env-row"><label for="f-tavg">기온</label><input id="f-tavg" type="range" min="0" max="35" step="0.1"><output id="v-tavg"></output></div>
+        <div class="env-row"><label for="f-rain">강수량</label><input id="f-rain" type="range" min="0" max="60" step="0.1"><output id="v-rain"></output></div>
+        <div class="env-row"><label for="f-rank">홈팀 순위</label><select id="f-rank">
+          <option value="5.5">시즌 초 (순위 없음)</option>
+          <option value="1">1위</option><option value="2">2위</option><option value="3">3위</option>
+          <option value="4">4위</option><option value="5">5위</option><option value="6">6위</option>
+          <option value="7">7위</option><option value="8">8위</option><option value="9">9위</option>
+          <option value="10">10위</option>
+        </select></div>
+        <div class="env-row"><label for="f-streak">연승·연패</label><select id="f-streak">
+          <option value="-5">5연패</option><option value="-4">4연패</option><option value="-3">3연패</option>
+          <option value="-2">2연패</option><option value="-1">1연패</option><option value="0">없음</option>
+          <option value="1">1연승</option><option value="2">2연승</option><option value="3">3연승</option>
+          <option value="4">4연승</option><option value="5">5연승</option>
+        </select></div>
+        <p class="hint" id="env-note" hidden>실제와 다른 환경이에요. 2025 실제 값은 실제로 있었던 일이라 그대로예요.</p>
+        <button type="button" class="reset" id="reset-env">실제 환경으로 되돌리기</button>
+      </section>
+    </form>
+    <section class="results">
+      <div class="card">
+        <p class="eyebrow">③ 모델 가격</p>
+        <p class="price" aria-live="polite"><span id="t-price"></span><span class="won">원</span></p>
+        <p class="delta" id="t-delta"></p>
+      </div>
+      <div class="card">
+        <p class="eyebrow">④ 수익성</p>
+        <p class="profit" id="profit"></p>
+        <p id="profit-text"></p>
+      </div>
+      <div class="card"><table class="compare">
+        <caption>⑤ 2025 실제와 비교</caption>
+        <thead><tr><th></th><th>모델 가격일 때</th><th>2025 실제</th><th>차이</th></tr></thead>
+        <tbody>
+          <tr><th>가격</th><td id="m-price"></td><td id="a-price"></td><td id="d-price"></td></tr>
+          <tr><th>관중</th><td id="m-crowd"></td><td id="a-crowd"></td><td id="d-crowd"></td></tr>
+          <tr><th>입장 수입</th><td id="m-rev"></td><td id="a-rev"></td><td id="d-rev"></td></tr>
+        </tbody>
+      </table></div>
+      <div class="card charts">
+        <figure class="bars">
+          <figcaption>관중 수 비교</figcaption>
+          <p class="axis-y">판매 가격</p>
+          <div class="row"><span class="lab">2025 실제 (17,000원)</span><div class="track cap"><div class="bar actual" id="bar-crowd-a"></div></div><span class="val" id="val-crowd-a"></span></div>
+          <div class="row"><span class="lab lab-model"></span><div class="track cap"><div class="bar model" id="bar-crowd-m"></div></div><span class="val" id="val-crowd-m"></span></div>
+          <p class="axis-x">관중 수 (명) · 0 ~ 25,000명, 점선은 정원 23,750명</p>
+        </figure>
+        <figure class="bars">
+          <figcaption>입장 수입 비교</figcaption>
+          <p class="axis-y">판매 가격</p>
+          <div class="row"><span class="lab">2025 실제 (17,000원)</span><div class="track"><div class="bar actual" id="bar-rev-a"></div></div><span class="val" id="val-rev-a"></span></div>
+          <div class="row"><span class="lab lab-model"></span><div class="track"><div class="bar model" id="bar-rev-m"></div></div><span class="val" id="val-rev-m"></span></div>
+          <p class="axis-x">입장 수입 (억 원) · 0 ~ 6억 원</p>
+        </figure>
+      </div>
+    </section>
+  </main>
+  <footer class="foot">
+    <p>정가 17,000원(가정)과 잠실 정원 23,750명 기준이에요. 2025년 입장 수입은 17,000원 × 실제 관중으로 추정했고, 모델은 경기 7일 전 수요 예측과 팬 가격 설문(PSM)으로 가격을 정해요.</p>
+  </footer>
+</div>
+<script>
+// 계산 부분: dynamic_price_model.py와 같은 식 (v2 Tobit 수요 예측 → PSM 탄력성 → 공통 기울기 가격)
+const PARAMS = {"feats": ["wknd_hol", "holiday", "dh", "prev_home_rank", "prev_streak", "tavg", "rain"], "mean": {"wknd_hol": 0.0, "holiday": 0.0, "dh": 0.0, "prev_home_rank": 5.285284463894967, "prev_streak": 0.20158643326039388, "tavg": 21.585448577680523, "rain": 2.5198577680525167}, "sd": {"wknd_hol": 1.0, "holiday": 1.0, "dh": 1.0, "prev_home_rank": 2.828642261983854, "prev_streak": 2.5281144625231873, "tavg": 5.666714338950765, "rain": 9.964165044865727}, "coef": {"const": -13.971146942248224, "wknd_hol": 28.897839464507843, "holiday": 4.761896392704761, "dh": -26.335784885636816, "prev_home_rank": -0.4691795490919328, "prev_streak": 1.791331250171057, "tavg": 0.32485675960079385, "rain": -1.4227943213999745, "dow_0": 14.117840779570567, "dow_2": 0.3232860117503237, "dow_3": 3.240129736120207, "dow_4": 17.08825063245974, "dow_5": 15.44192175689245, "dow_6": -3.0705687638073176}, "dows": [0, 2, 3, 4, 5, 6], "si": {"4": 0.9686375292494129, "5": 1.1034516759818, "6": 1.0127843697175947, "7": 0.9741355554538493, "8": 0.9255039731204291, "9": 1.0053455718880846}, "qbar": 18984.49955592158};
+const BINS = [[14000, 5], [16000, 1], [18000, 5], [20000, 11], [22000, 5], [24000, 4], [26000, 2], [28000, 2], [30000, 13]];  // PSM 4번 문항(구매 고민 시작) 가격 구간별 응답 수
+const RESPONDENTS = 48;
+const SIM = 1.1;  // 시뮬레이션 가격 = 정가 × 110%
+
+function accept(p) {
+  // 가격 p에도 사겠다는 비율. 구간 안에서는 고르게 퍼져 있다고 본다 ('30000원 이상'은 30,000~34,000원)
+  let gone = 0;
+  for (const [lo, n] of BINS) gone += n * Math.min(1, Math.max(0, (p - lo) / (lo >= 30000 ? 4000 : 2000)));
+  return 1 - gone / RESPONDENTS;
+}
+
+function elasticity(p1) {
+  const s1 = accept(p1), s2 = accept(p1 * SIM);
+  return { eps: s1 > 0 ? (s1 - s2) / s1 / (SIM - 1) : NaN, s1, s2 };
+}
+
+function dateInfo(iso) {
+  const [y, m, d] = String(iso).split("-").map(Number);
+  const dt = new Date(Date.UTC(y, m - 1, d));
+  if (!y || isNaN(dt) || dt.getUTCMonth() !== m - 1 || dt.getUTCDate() !== d) return null;
+  const period = Math.min(9, Math.max(4, m));  // 3월은 4월, 10월은 9월 계절 지수
+  return { y, m, d, dow: (dt.getUTCDay() + 6) % 7, period, si: PARAMS.si[period] };  // dow: 월요일 0
+}
+
+function demand(x) {
+  // μ = (최근 수준 ÷ 계절 지수 + 경기 조건 효과) × 계절 지수, Q0 = μ ÷ 100 × 정원
+  const di = dateInfo(x.date);
+  const weekend = di.dow >= 5;
+  const vals = { wknd_hol: weekend || x.holiday ? 1 : 0, holiday: x.holiday ? 1 : 0, dh: x.dh ? 1 : 0,
+                 prev_home_rank: x.rank, prev_streak: x.streak, tavg: x.tavg, rain: x.rain };
+  const terms = [{ key: "const", value: PARAMS.coef.const }];
+  for (const f of PARAMS.feats) terms.push({ key: f, value: PARAMS.coef[f] * (vals[f] - PARAMS.mean[f]) / PARAMS.sd[f] });
+  if (PARAMS.dows.includes(di.dow)) terms.push({ key: "dow", value: PARAMS.coef["dow_" + di.dow] });
+  const effect = terms.reduce((s, t) => s + t.value, 0);
+  const L = x.level / di.si;
+  const mu = (L + effect) * di.si;
+  return { ...di, weekend, vals, terms, effect, L, mu, q0: mu / 100 * x.cap };
+}
+
+function price(q0, cap, p1, b) {
+  // 직선 수요 Q(P) = Q0 − b(P − P1)에서 입장 수입이 가장 큰 가격. 그때 관중이 정원 이상이면 정원이 딱 차는 가격
+  let p = (q0 + b * p1) / (2 * b);
+  const full = q0 - b * (p - p1) >= cap;
+  if (full) p = p1 + (q0 - cap) / b;
+  return { p, full, crowd: Math.min(cap, Math.max(0, q0 - b * (p - p1))) };
+}
+
+// 간소화 앱 비교 계산: 모델 가격, 2025 실제, 수익성 (core_built.js 뒤에 붙여 쓴다)
+// 차이는 화면에서 반올림해 보여 주는 두 값의 차로 계산한다 (template_lite.html의 render)
+const P1 = 17000;   // 2025 정가(가정): LG 잠실 레드석 주중 가격
+const CAP = 23750;  // 잠실야구장 정원
+const B = elasticity(P1).eps * PARAMS.qbar / P1;  // 가격을 1원 올릴 때 덜 오는 사람 수(약 0.5912명)
+
+function compare(g, env) {
+  // g: 고른 경기(GAMES의 한 줄), env: 화면에서 고른 환경 {tavg, rain, rank, streak}
+  const d = demand({ date: g.date, level: g.level_pct, rank: env.rank, streak: env.streak,
+                     tavg: env.tavg, rain: env.rain, holiday: false, dh: false, cap: CAP });
+  const p = price(d.q0, CAP, P1, B).p;                          // 모델 가격(반올림 전)
+  const want = g.sold ? Math.max(CAP, d.q0) : g.att;            // 정가였을 때 오려던 사람
+  const crowd = Math.min(CAP, Math.max(0, want - B * (p - P1)));  // 모델 가격이었다면 왔을 관중
+  return {
+    model: { price: p, crowd, revenue: p * crowd },
+    actual: { price: P1, crowd: g.att, revenue: P1 * g.att, sold: !!g.sold },
+    profit: (p * crowd) / (P1 * g.att) - 1,                     // 수익성: 0.114면 +11.4%
+  };
+}
+
+
+const GAMES = [{"date": "2025-03-25", "team": "LG", "level_pct": 107.62544704644048, "tavg": 12.7, "rain": 0.0, "prev_home_rank": 5.5, "prev_streak": 0.0, "att": 23750, "sold": 1}, {"date": "2025-03-26", "team": "LG", "level_pct": 107.62544704644048, "tavg": 15.5, "rain": 0.0, "prev_home_rank": 5.5, "prev_streak": 0.0, "att": 23750, "sold": 1}, {"date": "2025-03-27", "team": "LG", "level_pct": 107.62544704644048, "tavg": 13.7, "rain": 0.3, "prev_home_rank": 5.5, "prev_streak": 0.0, "att": 23750, "sold": 1}, {"date": "2025-03-28", "team": "두산", "level_pct": 104.33363209260443, "tavg": 6.5, "rain": 0.0, "prev_home_rank": 5.5, "prev_streak": 0.0, "att": 23750, "sold": 1}, {"date": "2025-04-02", "team": "두산", "level_pct": 104.33363209260443, "tavg": 8.9, "rain": 0.0, "prev_home_rank": 5.5, "prev_streak": 0.0, "att": 8336, "sold": 0}, {"date": "2025-04-03", "team": "두산", "level_pct": 104.33363209260443, "tavg": 9.8, "rain": 0.0, "prev_home_rank": 5.5, "prev_streak": 0.0, "att": 9131, "sold": 0}, {"date": "2025-04-04", "team": "LG", "level_pct": 100.0, "tavg": 10.6, "rain": 0.0, "prev_home_rank": 1.0, "prev_streak": 5.0, "att": 23750, "sold": 1}, {"date": "2025-04-08", "team": "두산", "level_pct": 101.73345283704178, "tavg": 13.8, "rain": 0.0, "prev_home_rank": 10.0, "prev_streak": -2.0, "att": 20986, "sold": 0}, {"date": "2025-04-09", "team": "두산", "level_pct": 87.8865158922051, "tavg": 12.7, "rain": 0.8, "prev_home_rank": 8.0, "prev_streak": 1.0, "att": 19300, "sold": 0}, {"date": "2025-04-10", "team": "두산", "level_pct": 74.70905263157894, "tavg": 13.2, "rain": 0.0, "prev_home_rank": 7.0, "prev_streak": 2.0, "att": 21561, "sold": 0}, {"date": "2025-04-11", "team": "LG", "level_pct": 100.0, "tavg": 16.2, "rain": 0.0, "prev_home_rank": 1.0, "prev_streak": 2.0, "att": 23750, "sold": 1}, {"date": "2025-04-15", "team": "LG", "level_pct": 100.0, "tavg": 8.2, "rain": 0.0, "prev_home_rank": 1.0, "prev_streak": 3.0, "att": 23750, "sold": 1}, {"date": "2025-04-16", "team": "LG", "level_pct": 100.0, "tavg": 14.6, "rain": 0.0, "prev_home_rank": 1.0, "prev_streak": 3.0, "att": 23750, "sold": 1}, {"date": "2025-04-17", "team": "LG", "level_pct": 100.0, "tavg": 19.7, "rain": 0.0, "prev_home_rank": 1.0, "prev_streak": 3.0, "att": 23750, "sold": 1}, {"date": "2025-04-18", "team": "두산", "level_pct": 66.79073684210526, "tavg": 18.6, "rain": 0.0, "prev_home_rank": 6.0, "prev_streak": -2.0, "att": 23750, "sold": 1}, {"date": "2025-04-22", "team": "LG", "level_pct": 99.3162105263158, "tavg": 17.8, "rain": 34.8, "prev_home_rank": 1.0, "prev_streak": 1.0, "att": 12941, "sold": 0}, {"date": "2025-04-23", "team": "LG", "level_pct": 99.3162105263158, "tavg": 16.8, "rain": 0.0, "prev_home_rank": 1.0, "prev_streak": 2.0, "att": 17828, "sold": 0}, {"date": "2025-04-24", "team": "LG", "level_pct": 99.3162105263158, "tavg": 14.7, "rain": 0.0, "prev_home_rank": 1.0, "prev_streak": -1.0, "att": 19325, "sold": 0}, {"date": "2025-04-25", "team": "두산", "level_pct": 79.77094736842105, "tavg": 12.5, "rain": 0.0, "prev_home_rank": 7.0, "prev_streak": 2.0, "att": 23750, "sold": 1}, {"date": "2025-04-29", "team": "두산", "level_pct": 94.40926315789473, "tavg": 14.8, "rain": 0.0, "prev_home_rank": 8.0, "prev_streak": -2.0, "att": 14138, "sold": 0}, {"date": "2025-04-30", "team": "두산", "level_pct": 94.40926315789473, "tavg": 18.4, "rain": 0.0, "prev_home_rank": 8.0, "prev_streak": -2.0, "att": 17158, "sold": 0}, {"date": "2025-05-01", "team": "두산", "level_pct": 107.54906403483116, "tavg": 14.7, "rain": 21.1, "prev_home_rank": 8.0, "prev_streak": -2.0, "att": 19883, "sold": 0}, {"date": "2025-05-02", "team": "LG", "level_pct": 93.62277881220675, "tavg": 13.4, "rain": 0.0, "prev_home_rank": 1.0, "prev_streak": -1.0, "att": 23750, "sold": 1}, {"date": "2025-05-07", "team": "두산", "level_pct": 98.37327577593453, "tavg": 14.9, "rain": 0.0, "prev_home_rank": 8.0, "prev_streak": -2.0, "att": 23750, "sold": 1}, {"date": "2025-05-13", "team": "LG", "level_pct": 95.6411982417968, "tavg": 19.9, "rain": 0.0, "prev_home_rank": 1.0, "prev_streak": 2.0, "att": 18080, "sold": 0}, {"date": "2025-05-14", "team": "LG", "level_pct": 95.6411982417968, "tavg": 21.0, "rain": 0.0, "prev_home_rank": 1.0, "prev_streak": 2.0, "att": 18286, "sold": 0}, {"date": "2025-05-15", "team": "LG", "level_pct": 95.6411982417968, "tavg": 19.5, "rain": 1.1, "prev_home_rank": 1.0, "prev_streak": 2.0, "att": 18119, "sold": 0}, {"date": "2025-05-20", "team": "두산", "level_pct": 93.32378947368422, "tavg": 22.2, "rain": 1.0, "prev_home_rank": 9.0, "prev_streak": -2.0, "att": 17782, "sold": 0}, {"date": "2025-05-21", "team": "두산", "level_pct": 93.32378947368422, "tavg": 25.5, "rain": 0.0, "prev_home_rank": 9.0, "prev_streak": -2.0, "att": 14052, "sold": 0}, {"date": "2025-05-22", "team": "두산", "level_pct": 93.32378947368422, "tavg": 23.9, "rain": 0.8, "prev_home_rank": 9.0, "prev_streak": -2.0, "att": 14592, "sold": 0}, {"date": "2025-05-23", "team": "두산", "level_pct": 93.32378947368422, "tavg": 19.4, "rain": 1.2, "prev_home_rank": 9.0, "prev_streak": -2.0, "att": 17944, "sold": 0}, {"date": "2025-05-27", "team": "LG", "level_pct": 84.61221052631579, "tavg": 20.8, "rain": 0.0, "prev_home_rank": 1.0, "prev_streak": 1.0, "att": 23750, "sold": 1}, {"date": "2025-05-28", "team": "LG", "level_pct": 84.61221052631579, "tavg": 20.8, "rain": 0.0, "prev_home_rank": 1.0, "prev_streak": 1.0, "att": 23750, "sold": 1}, {"date": "2025-05-29", "team": "LG", "level_pct": 84.61221052631579, "tavg": 21.2, "rain": 0.0, "prev_home_rank": 1.0, "prev_streak": 1.0, "att": 23750, "sold": 1}, {"date": "2025-05-30", "team": "LG", "level_pct": 84.61221052631579, "tavg": 22.2, "rain": 0.0, "prev_home_rank": 1.0, "prev_streak": 1.0, "att": 23750, "sold": 1}, {"date": "2025-06-04", "team": "두산", "level_pct": 69.09910623026434, "tavg": 20.5, "rain": 0.0, "prev_home_rank": 9.0, "prev_streak": 1.0, "att": 23750, "sold": 1}, {"date": "2025-06-05", "team": "두산", "level_pct": 69.09910623026434, "tavg": 21.7, "rain": 0.0, "prev_home_rank": 9.0, "prev_streak": 1.0, "att": 23750, "sold": 1}, {"date": "2025-06-10", "team": "LG", "level_pct": 93.42664055072217, "tavg": 21.7, "rain": 0.0, "prev_home_rank": 1.0, "prev_streak": -3.0, "att": 17221, "sold": 0}, {"date": "2025-06-11", "team": "LG", "level_pct": 93.42664055072217, "tavg": 22.7, "rain": 0.0, "prev_home_rank": 1.0, "prev_streak": -3.0, "att": 18192, "sold": 0}, {"date": "2025-06-12", "team": "LG", "level_pct": 93.42664055072217, "tavg": 25.5, "rain": 0.0, "prev_home_rank": 1.0, "prev_streak": -3.0, "att": 18321, "sold": 0}, {"date": "2025-06-17", "team": "LG", "level_pct": 89.57187514988374, "tavg": 24.8, "rain": 0.0, "prev_home_rank": 1.0, "prev_streak": -1.0, "att": 15069, "sold": 0}, {"date": "2025-06-18", "team": "LG", "level_pct": 86.53479395957162, "tavg": 25.5, "rain": 0.0, "prev_home_rank": 1.0, "prev_streak": 1.0, "att": 16103, "sold": 0}, {"date": "2025-06-19", "team": "LG", "level_pct": 83.60634434820685, "tavg": 28.1, "rain": 0.8, "prev_home_rank": 1.0, "prev_streak": 2.0, "att": 15636, "sold": 0}, {"date": "2025-06-24", "team": "두산", "level_pct": 85.37600000000002, "tavg": 25.0, "rain": 2.3, "prev_home_rank": 9.0, "prev_streak": 2.0, "att": 12141, "sold": 0}, {"date": "2025-06-26", "team": "두산", "level_pct": 85.37600000000002, "tavg": 22.2, "rain": 1.1, "prev_home_rank": 9.0, "prev_streak": 2.0, "att": 13553, "sold": 0}, {"date": "2025-06-27", "team": "LG", "level_pct": 70.16505263157894, "tavg": 25.0, "rain": 0.0, "prev_home_rank": 2.0, "prev_streak": -1.0, "att": 23750, "sold": 1}, {"date": "2025-07-01", "team": "두산", "level_pct": 72.71503213743921, "tavg": 28.6, "rain": 0.9, "prev_home_rank": 9.0, "prev_streak": 1.0, "att": 18022, "sold": 0}, {"date": "2025-07-02", "team": "두산", "level_pct": 72.71503213743921, "tavg": 28.6, "rain": 0.0, "prev_home_rank": 9.0, "prev_streak": 1.0, "att": 20448, "sold": 0}, {"date": "2025-07-03", "team": "두산", "level_pct": 64.45577084303133, "tavg": 28.3, "rain": 0.0, "prev_home_rank": 9.0, "prev_streak": -1.0, "att": 21525, "sold": 0}, {"date": "2025-07-04", "team": "두산", "level_pct": 64.45577084303133, "tavg": 27.2, "rain": 0.0, "prev_home_rank": 9.0, "prev_streak": -1.0, "att": 16101, "sold": 0}, {"date": "2025-07-08", "team": "LG", "level_pct": 96.18390494370266, "tavg": 31.3, "rain": 11.8, "prev_home_rank": 2.0, "prev_streak": -2.0, "att": 16098, "sold": 0}, {"date": "2025-07-09", "team": "LG", "level_pct": 96.18390494370266, "tavg": 31.9, "rain": 0.0, "prev_home_rank": 2.0, "prev_streak": -2.0, "att": 16400, "sold": 0}, {"date": "2025-07-10", "team": "LG", "level_pct": 96.18390494370266, "tavg": 31.4, "rain": 0.0, "prev_home_rank": 2.0, "prev_streak": -2.0, "att": 16628, "sold": 0}, {"date": "2025-07-18", "team": "LG", "level_pct": 79.8428251353758, "tavg": 24.7, "rain": 16.1, "prev_home_rank": 2.0, "prev_streak": -1.0, "att": 23750, "sold": 1}, {"date": "2025-07-22", "team": "두산", "level_pct": 85.5562105263158, "tavg": 28.8, "rain": 0.1, "prev_home_rank": 9.0, "prev_streak": 2.0, "att": 23750, "sold": 1}, {"date": "2025-07-23", "team": "두산", "level_pct": 85.5562105263158, "tavg": 28.9, "rain": 0.0, "prev_home_rank": 9.0, "prev_streak": 2.0, "att": 23750, "sold": 1}, {"date": "2025-07-24", "team": "두산", "level_pct": 85.5562105263158, "tavg": 29.8, "rain": 0.0, "prev_home_rank": 9.0, "prev_streak": 2.0, "att": 23750, "sold": 1}, {"date": "2025-07-25", "team": "두산", "level_pct": 85.5562105263158, "tavg": 31.1, "rain": 0.0, "prev_home_rank": 9.0, "prev_streak": 2.0, "att": 20007, "sold": 0}, {"date": "2025-07-29", "team": "LG", "level_pct": 87.81305263157897, "tavg": 32.0, "rain": 0.0, "prev_home_rank": 2.0, "prev_streak": 1.0, "att": 17294, "sold": 0}, {"date": "2025-07-30", "team": "LG", "level_pct": 87.81305263157897, "tavg": 32.1, "rain": 0.0, "prev_home_rank": 2.0, "prev_streak": 1.0, "att": 17782, "sold": 0}, {"date": "2025-07-31", "team": "LG", "level_pct": 87.81305263157897, "tavg": 30.9, "rain": 0.0, "prev_home_rank": 2.0, "prev_streak": 1.0, "att": 17630, "sold": 0}, {"date": "2025-08-01", "team": "두산", "level_pct": 92.01307588758245, "tavg": 31.0, "rain": 0.0, "prev_home_rank": 9.0, "prev_streak": -1.0, "att": 15073, "sold": 0}, {"date": "2025-08-05", "team": "LG", "level_pct": 84.1444365755895, "tavg": 29.1, "rain": 0.0, "prev_home_rank": 2.0, "prev_streak": 1.0, "att": 20239, "sold": 0}, {"date": "2025-08-06", "team": "LG", "level_pct": 85.06771158993011, "tavg": 27.1, "rain": 22.0, "prev_home_rank": 2.0, "prev_streak": 2.0, "att": 20427, "sold": 0}, {"date": "2025-08-07", "team": "LG", "level_pct": 80.1713137669106, "tavg": 28.2, "rain": 0.0, "prev_home_rank": 2.0, "prev_streak": 3.0, "att": 21392, "sold": 0}, {"date": "2025-08-08", "team": "LG", "level_pct": 80.1713137669106, "tavg": 26.6, "rain": 6.3, "prev_home_rank": 2.0, "prev_streak": 3.0, "att": 23750, "sold": 1}, {"date": "2025-08-12", "team": "두산", "level_pct": 75.01468409117746, "tavg": 28.6, "rain": 0.0, "prev_home_rank": 9.0, "prev_streak": -1.0, "att": 11590, "sold": 0}, {"date": "2025-08-14", "team": "두산", "level_pct": 75.01468409117746, "tavg": 25.5, "rain": 47.8, "prev_home_rank": 9.0, "prev_streak": -1.0, "att": 10938, "sold": 0}, {"date": "2025-08-19", "team": "LG", "level_pct": 95.21599999999998, "tavg": 29.1, "rain": 0.0, "prev_home_rank": 1.0, "prev_streak": -1.0, "att": 23750, "sold": 1}, {"date": "2025-08-20", "team": "LG", "level_pct": 95.21599999999998, "tavg": 29.4, "rain": 0.0, "prev_home_rank": 1.0, "prev_streak": -1.0, "att": 23750, "sold": 1}, {"date": "2025-08-21", "team": "LG", "level_pct": 95.21599999999998, "tavg": 29.8, "rain": 0.0, "prev_home_rank": 1.0, "prev_streak": -1.0, "att": 23750, "sold": 1}, {"date": "2025-08-22", "team": "두산", "level_pct": 65.66568421052631, "tavg": 29.4, "rain": 0.0, "prev_home_rank": 9.0, "prev_streak": 2.0, "att": 16397, "sold": 0}, {"date": "2025-08-26", "team": "두산", "level_pct": 78.97094736842105, "tavg": 27.6, "rain": 5.4, "prev_home_rank": 9.0, "prev_streak": 4.0, "att": 20491, "sold": 0}, {"date": "2025-08-27", "team": "두산", "level_pct": 78.97094736842105, "tavg": 26.7, "rain": 0.0, "prev_home_rank": 9.0, "prev_streak": 4.0, "att": 21198, "sold": 0}, {"date": "2025-08-28", "team": "두산", "level_pct": 78.97094736842105, "tavg": 28.3, "rain": 0.0, "prev_home_rank": 9.0, "prev_streak": 4.0, "att": 23126, "sold": 0}, {"date": "2025-08-29", "team": "LG", "level_pct": 100.0, "tavg": 29.0, "rain": 32.2, "prev_home_rank": 1.0, "prev_streak": 3.0, "att": 22231, "sold": 0}, {"date": "2025-09-02", "team": "LG", "level_pct": 108.62682398849803, "tavg": 26.0, "rain": 0.0, "prev_home_rank": 1.0, "prev_streak": 3.0, "att": 23750, "sold": 1}, {"date": "2025-09-10", "team": "두산", "level_pct": 95.64100172878672, "tavg": 24.8, "rain": 0.0, "prev_home_rank": 9.0, "prev_streak": 1.0, "att": 17856, "sold": 0}, {"date": "2025-09-11", "team": "LG", "level_pct": 104.37125460004316, "tavg": 25.8, "rain": 0.0, "prev_home_rank": 1.0, "prev_streak": 1.0, "att": 20722, "sold": 0}, {"date": "2025-09-16", "team": "두산", "level_pct": 95.64100172878672, "tavg": 23.7, "rain": 17.5, "prev_home_rank": 9.0, "prev_streak": 1.0, "att": 12716, "sold": 0}, {"date": "2025-09-17", "team": "두산", "level_pct": 90.70493372908258, "tavg": 22.7, "rain": 52.7, "prev_home_rank": 9.0, "prev_streak": -2.0, "att": 10037, "sold": 0}, {"date": "2025-09-18", "team": "두산", "level_pct": 90.70493372908258, "tavg": 22.1, "rain": 0.0, "prev_home_rank": 9.0, "prev_streak": -2.0, "att": 13498, "sold": 0}, {"date": "2025-09-25", "team": "두산", "level_pct": 66.71834889733057, "tavg": 22.5, "rain": 0.3, "prev_home_rank": 9.0, "prev_streak": 1.0, "att": 23750, "sold": 1}, {"date": "2025-09-30", "team": "LG", "level_pct": 97.4501052631579, "tavg": 19.8, "rain": 0.0, "prev_home_rank": 1.0, "prev_streak": -1.0, "att": 23750, "sold": 1}, {"date": "2025-10-01", "team": "LG", "level_pct": 97.4501052631579, "tavg": 20.5, "rain": 0.0, "prev_home_rank": 1.0, "prev_streak": -1.0, "att": 23750, "sold": 1}];  // 85경기, 날짜순
+const DOW = "월화수목금토일";
+const AXIS_CROWD = 25000, AXIS_REV = 6e8;  // 그래프 가로축 최댓값(고정)
+const $ = (id) => document.getElementById(id);
+const fmt = (n, d = 0) => n.toLocaleString("ko-KR", { minimumFractionDigits: d, maximumFractionDigits: d });
+const won10 = (p) => Math.round(p / 10) * 10;
+function money(w) {
+  const man = Math.round(w / 1e4), eok = Math.floor(man / 1e4), rest = man % 1e4;
+  return eok ? `${eok}억${rest ? " " + fmt(rest) + "만" : ""}원` : `${fmt(rest)}만원`;
+}
+const signed = (n, f) => (n < 0 ? "−" : "+") + f(Math.abs(n));  // money()는 양수만 받으니 부호는 따로
+const pct1 = (v) => signed(v * 100, (x) => fmt(x, 1)) + "%";
+
+// ① 경기 목록: 달별로 묶는다
+const byMonth = {};
+GAMES.forEach((g, i) => {
+  const di = dateInfo(g.date);
+  (byMonth[di.m] ||= []).push(`<option value="${i}">${di.m}월 ${di.d}일 (${DOW[di.dow]}) · ${g.team}${g.sold ? " · 매진" : ""}</option>`);
+});
+$("f-game").innerHTML = Object.entries(byMonth)
+  .map(([m, opts]) => `<optgroup label="${m}월">${opts.join("")}</optgroup>`).join("");
+
+const actualEnv = (g) => ({ tavg: g.tavg, rain: g.rain, rank: g.prev_home_rank, streak: g.prev_streak });
+const readEnv = () => ({ tavg: +$("f-tavg").value, rain: +$("f-rain").value, rank: +$("f-rank").value, streak: +$("f-streak").value });
+function setEnv(e) {
+  $("f-tavg").value = e.tavg; $("f-rain").value = e.rain; $("f-rank").value = e.rank; $("f-streak").value = e.streak;
+}
+
+function render() {
+  const g = GAMES[$("f-game").value], env = readEnv(), act = actualEnv(g);
+  const r = compare(g, env);
+  const pm = won10(r.model.price), cm = Math.round(r.model.crowd);
+  const manM = Math.round(r.model.revenue / 1e4), manA = Math.round(r.actual.revenue / 1e4);  // 만 원 단위
+
+  // ② 환경: 지금 값, 실제와 다른지
+  $("v-tavg").textContent = `${fmt(env.tavg, 1)}°C`;
+  $("v-rain").textContent = `${fmt(env.rain, 1)}mm`;
+  $("env-note").hidden = Object.keys(act).every((k) => Math.abs(env[k] - act[k]) < 1e-9);
+
+  // ③ 모델 가격
+  $("t-price").textContent = fmt(pm);
+  $("t-delta").textContent = pm === P1 ? "2025 실제 가격 17,000원과 같아요"
+    : `2025 실제 가격 17,000원보다 ${fmt(Math.abs(pm - P1))}원 ${pm > P1 ? "높아요" : "낮아요"} (${pct1(pm / P1 - 1)})`;
+
+  // ④ 수익성
+  $("profit").textContent = pct1(r.profit);
+  $("profit").classList.toggle("down", r.profit < 0);
+  $("profit-text").textContent = `이 가격이었다면 입장 수입이 실제보다 ${money(Math.abs(manM - manA) * 1e4)} `
+    + `${manM >= manA ? "늘었을" : "줄었을"} 거예요. 관중은 ${fmt(Math.abs(cm - g.att))}명 ${cm <= g.att ? "줄어요" : "늘어요"}.`;
+
+  // ⑤ 비교 표: 차이는 화면에 보이는(반올림한) 두 값의 차
+  $("m-price").textContent = `${fmt(pm)}원`;
+  $("a-price").textContent = `${fmt(P1)}원`;
+  $("d-price").textContent = `${signed(pm - P1, fmt)}원`;
+  $("m-crowd").textContent = `${fmt(cm)}명`;
+  $("a-crowd").textContent = `${fmt(g.att)}명${g.sold ? " (매진)" : ""}`;
+  $("d-crowd").textContent = `${signed(cm - g.att, fmt)}명`;
+  $("m-rev").textContent = money(manM * 1e4);
+  $("a-rev").textContent = money(manA * 1e4);
+  $("d-rev").textContent = signed((manM - manA) * 1e4, money);
+  $("d-rev").classList.toggle("down", manM < manA);
+
+  // ⑥ 그래프: 막대 너비 = 값 ÷ 축 최댓값
+  const bar = (id, v, max) => { $(id).style.width = `${Math.min(100, v / max * 100)}%`; };
+  bar("bar-crowd-a", g.att, AXIS_CROWD); bar("bar-crowd-m", cm, AXIS_CROWD);
+  bar("bar-rev-a", r.actual.revenue, AXIS_REV); bar("bar-rev-m", r.model.revenue, AXIS_REV);
+  $("val-crowd-a").textContent = `${fmt(g.att)}명`; $("val-crowd-m").textContent = `${fmt(cm)}명`;
+  $("val-rev-a").textContent = money(manA * 1e4); $("val-rev-m").textContent = money(manM * 1e4);
+  document.querySelectorAll(".lab-model").forEach((el) => { el.textContent = `모델 가격 (${fmt(pm)}원)`; });
+}
+
+function pickGame() { setEnv(actualEnv(GAMES[$("f-game").value])); render(); }
+$("f-game").addEventListener("change", pickGame);
+$("reset-env").addEventListener("click", pickGame);
+$("env").addEventListener("input", render);
+$("form").addEventListener("submit", (e) => e.preventDefault());
+$("f-game").value = String(GAMES.findIndex((g) => g.date === "2025-08-05"));  // 처음엔 8/5 LG
+pickGame();
+</script>
+</body>
+</html>

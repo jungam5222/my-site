@@ -364,6 +364,7 @@ a.row-card:hover .row-arrow { color: var(--c); }
 .proj-hold:hover { transform: rotate(-30deg) scale(1.05); }
 .proj-body-sec { padding-top: 32px; }
 .proj-layout { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 40px; align-items: start; }
+.proj-layout > * { min-width: 0; }
 .proj-side { position: sticky; top: 84px; }
 .proj-side .cv div { grid-template-columns: 72px 1fr; }
 .proj-tags { margin-top: 14px; }
