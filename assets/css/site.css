@@ -465,7 +465,7 @@ a.row-card:hover .row-arrow { color: var(--c); }
   .wrap { padding: 0 16px; }
   .header-inner { height: auto; padding-top: 10px; padding-bottom: 8px; flex-direction: column; align-items: flex-start; gap: 6px; }
   .nav { width: calc(100% + 16px); margin-right: -16px; }
-  .nav a { padding: 5px 10px; font-size: 14px; }
+  .nav a { padding: 5px 8px; font-size: 14px; }
   main section { padding: 40px 0; }
   .facts { grid-template-columns: 1fr; }
   .row-card { grid-template-columns: 36px 1fr auto; grid-template-areas: "hold main arrow" "hold meta meta"; gap: 4px 12px; padding: 14px; }

@@ -47,6 +47,7 @@
     { key: 'lab', label: 'Lab', url: '/lab/' },
     { key: 'climbing', label: 'Climbing', url: '/climbing/' },
     { key: 'game', label: 'Game', url: 'https://game.yunmin.dev', ext: true },
+    { key: 'cv', label: 'CV', url: 'https://me.yunmin.dev', ext: true },
   ];
 
   /* ---------- 공통: 헤더 ---------- */
