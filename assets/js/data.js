@@ -72,7 +72,7 @@ window.SITE = {
   cv: [
     { label: '학력', value: '고려대학교 컴퓨터학과 · 수학과 이중전공 · 2학년', en: { label: "Education", value: "Korea University · Computer Science & Mathematics (double major) · 2nd year" } },
     { label: '관심 분야', value: 'Agent, Video, Multimodal', en: { label: "Interests", value: "Agents, video, multimodal" } },
-    { label: '대회', value: '해커톤 · 데이터톤 6회 참가 · AIKU 주니어톤 1위 · LG Aimers 상위 4%', en: { label: "Competitions", value: "6 hackathons & datathons · 1st at AIKU Juniorthon · Top 4% at LG Aimers" } },
+    { label: '대회', value: '해커톤 · 데이터톤 8회 참가 · AIKU 주니어톤 1위 · LG Aimers 상위 4%', en: { label: "Competitions", value: "8 hackathons & datathons · 1st at AIKU Juniorthon · Top 4% at LG Aimers" } },
     { label: '활동', value: '컴퓨터학과 부학생회장 · AIKU · KUICS · Liberty', en: { label: "Activities", value: "Vice president of the CS student council · AIKU · KUICS · Liberty" } },
   ],
 
@@ -96,6 +96,7 @@ window.SITE = {
     { date: '2026.09 – Now', title: '고려대학교 수학과 이중전공', desc: '', en: { title: "Korea University, Mathematics double major", desc: "" } },
     { date: '2026.09', title: '연고전 AI 해커톤', desc: '"깃발대항전" 게임 Agent 개발', en: { title: "Yonsei × Korea AI Hackathon", desc: "Built a game agent for \"Flag Battle\"" } },
     { date: '2026.11', title: 'Inthon 2026 데이터톤 트랙', desc: '이미지 시퀀스 멀티모달 추론 / Public 0.599', en: { title: "Inthon 2026 Datathon Track", desc: "Multimodal reasoning over image sequences / public score 0.599" } },
+    { date: '2026.11', title: 'HAIKUTHON 2026', desc: 'AIKU × HAI 연합 데이터톤 · Multimodal RAG / Public 0.4091', en: { title: "HAIKUTHON 2026", desc: "AIKU × HAI joint datathon · multimodal RAG / public score 0.4091" } },
   ],
 
   // 쓸데없는 about me
@@ -132,6 +133,22 @@ window.SITE = {
    * period, team: (선택) 상세 페이지 정보 칸에 표시. 예: period: '2026.08.01 – 08.02', team: '4인'
    */
   projects: [
+    {
+      title: 'HAIKUTHON 2026',
+      slug: 'haikuthon-2026',
+      type: 'datathon',
+      event: 'AIKU × HAI 연합 데이터톤 (고려대 AIKU · 한양대 HAI)',
+      date: '2026.11',
+      period: '2026.11.21 – 2026.11.22',
+      result: '',
+      role: '2단계 재정렬 · 가족 listwise BLIP 학습',
+      team: '4인',
+      summary: '영문 설명에 맞는 이미지 한 장을 후보 16,000장에서 찾는 Multimodal RAG. FG-CLIP2로 후보 20장을 뽑고, 같은 장면의 "가족" 안에서 1등을 고르도록 학습한 BLIP으로 다시 정렬해 Public 0.4091.',
+      en: { event: "AIKU × HAI Joint Datathon (Korea Univ. AIKU · Hanyang Univ. HAI)", role: "Stage-2 reranking · family-listwise BLIP training", team: "4 people", summary: "Multimodal RAG: find the one image out of 16,000 that matches an English description. FG-CLIP2 picks 20 candidates, then a BLIP trained to pick the winner within a \"family\" of near-identical scenes reranks them, for a public score of 0.4091." },
+      tags: ['Multimodal RAG', 'FG-CLIP2', 'BLIP', 'Reranking'],
+      links: [],
+      featured: true,
+    },
     {
       title: 'Inthon 2026 데이터톤 트랙',
       slug: 'inthon-2026',
