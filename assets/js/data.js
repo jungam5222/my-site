@@ -71,7 +71,7 @@ window.SITE = {
   // CV 요약 (about 섹션 왼쪽)
   cv: [
     { label: '학력', value: '고려대학교 컴퓨터학과 · 수학과 이중전공 · 2학년', en: { label: "Education", value: "Korea University · Computer Science & Mathematics (double major) · 2nd year" } },
-    { label: '관심 분야', value: 'LLM, 컴퓨터 비전, 데이터 분석 등', placeholder: true, en: { label: "Interests", value: "LLMs, computer vision, data analysis, and more" } },
+    { label: '관심 분야', value: 'Agent, Video, Multimodal', en: { label: "Interests", value: "Agents, video, multimodal" } },
     { label: '대회', value: '해커톤 · 데이터톤 6회 참가 · AIKU 주니어톤 1위 · LG Aimers 상위 4%', en: { label: "Competitions", value: "6 hackathons & datathons · 1st at AIKU Juniorthon · Top 4% at LG Aimers" } },
     { label: '활동', value: '컴퓨터학과 부학생회장 · AIKU · KUICS · Liberty', en: { label: "Activities", value: "Vice president of the CS student council · AIKU · KUICS · Liberty" } },
   ],
